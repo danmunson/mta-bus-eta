@@ -113,7 +113,11 @@ class GetBusData:
         active = {}
         flag = False
         for stop in stops:
-            if stop.contents[0].name == 'a':
+            try:
+                el_name = stop.contents[0].name
+            except:
+                continue
+            if el_name == 'a':
                 name = stop.contents[0].string
                 active['stop'] = name
                 flag = True
