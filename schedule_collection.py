@@ -62,6 +62,7 @@ while current_duration.total_seconds() < TD_sec:
             csv = io.open('Routes/' + route[0] + '/stopdata.csv', 'a')
             url = route[1]
             capture(csv, url)
+            csv.close()
             print 'captured '+ route[0]
 
         scrape_duration = datetime.datetime.now() - scrape_start_time

@@ -15,3 +15,8 @@ NOTE--> After building a model (module coming soon), predicted ETAs can be compa
 SAMPLE URLS:
 M60SBS route: https://bustime.mta.info/m/?q=M60-SBS
 M15 route: https://bustime.mta.info/m/?q=M15
+
+DEPENDENCIES:
+requests (pip install requests)
+BeautifulSoup4 (pip install bs4)
+lxml (pip install lxml)
