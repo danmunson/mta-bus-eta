@@ -10,3 +10,8 @@ NOTE--> Important assumptions in data collection process:
     c. In each successive "snapshot" the bus must be in the same position as the previous, or the next position
 
 NOTE--> After building a model (module coming soon), predicted ETAs can be compared against MTA's provided ETAs (found by clicking link on bus stop name)
+
+
+SAMPLE URLS:
+M60SBS route: https://bustime.mta.info/m/?q=M60-SBS
+M15 route: https://bustime.mta.info/m/?q=M15
