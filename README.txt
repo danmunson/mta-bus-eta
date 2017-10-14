@@ -6,7 +6,7 @@ Steps for Gathering data from MTA bus sites:
 
 NOTE--> Important assumptions in data collection process:
     a. No two buses will ever occupy the same stop position
-    b. 3 buses will never be at 3 adjascent stops simultaneously
+    b. 3 buses will never be at 3 adjacent stops simultaneously
     c. In each successive "snapshot" the bus must be in the same position as the previous, or the next position
 
 NOTE--> After building a model (module coming soon), predicted ETAs can be compared against MTA's provided ETAs (found by clicking link on bus stop name)

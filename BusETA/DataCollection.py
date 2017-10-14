@@ -4,7 +4,6 @@ import pandas as pd
 from bs4 import BeautifulSoup as BS
 import datetime
 import unicodedata
-import unicodedata
 import os, shutil
 import sys
 
@@ -72,25 +71,6 @@ class GetBusData:
         return
 
     @classmethod
-    def delay(cls, interval):
-        start_time = datetime.datetime.now()
-        delta = datetime.datetime.now() - start_time
-        while delta.total_seconds() < interval:
-            delta = datetime.datetime.now() - start_time
-        return
-
-    @classmethod
-    def run_loop(cls, interval, iterations, writefile_path, url): #time args in seconds
-        csv = io.open(writefile_path, 'a')
-        csv.write(unicode('Direction,Stop,Status,Time\n'))
-        for i in range(int(iterations)):
-            cls.delay(interval)
-            cls.capture_bus_page(csv, url)
-            print "finished iteration #"+str(i)
-        csv.close()
-        return
-
-    @classmethod
     def save_stop(cls, data, string):
         line = data['direction'] + ',' + data['stop'] + ',' + data['status'] + ',' + data['time'] + '\n'
         string = string + line
@@ -100,36 +80,35 @@ class GetBusData:
     def get_direction_title(cls,stop):
         direction = stop.parent.parent.parent.parent.previous_sibling.string
         return direction
-
+    
     @classmethod
     def capture_bus_page(cls, csv, url):
         page = req.get(url)
         html = page.text
         time = str(datetime.datetime.now())
         soup = BS(html, 'lxml')
-        stops = soup.find_all('strong')
+        bolds = soup.find_all('strong')
         stop_line = ''
-        active_stops = []
         active = {}
-        flag = False
-        for stop in stops:
+        for i in range(len(bolds)):
+            stop = bolds[i]
             try:
-                el_name = stop.contents[0].name
+                ch_name = stop.contents[0].name
+                par_name = stop.parent.name
+                if ch_name == 'a' and par_name == 'li': #then assume it represents the bolded stop name, and a status will be the next element
+                    name = stop.contents[0].string
+                    active['stop'] = name
+                    status = bolds[i+1].string
+                    ## fix for error on Linux version of BS4 (cannot pick up "< 1 stop away", probably due to "<" char)
+                    if status == None:
+                        status = '< 1 stop away'
+                    ##
+                    active['status'] = status
+                    active['time'] = time
+                    active['direction'] = cls.get_direction_title(bolds[i+1])
+                    stop_line = cls.save_stop(active, stop_line)
+                    active = {}
             except:
                 continue
-            if el_name == 'a':
-                name = stop.contents[0].string
-                active['stop'] = name
-                flag = True
-                continue
-            if flag:
-                status = stop.string
-                active['status'] = status
-                active['time'] = time
-                active['direction'] = cls.get_direction_title(stop)
-                stop_line = cls.save_stop(active, stop_line)
-                active = {}
-                flag = False
-
         csv.write(unicode(stop_line))
         return
