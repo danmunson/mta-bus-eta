@@ -40,9 +40,9 @@ for name in route_names:
 ## Step 2: Loop through batches, passing each batch to the scrape cycler
 start_time_total = datetime.datetime.now()
 current_duration = datetime.datetime.now() - start_time_total
-for i in total_iterations:
+for i in range(total_iterations):
     #generate batch by cycling thru the route_dict in intervals of BATCH_SIZE
-
+    
     batch_routes = []
     batch_size = min(MAX_BATCH_SIZE, route_dict.shape[0])
     for i in range(batch_size):
@@ -68,5 +68,7 @@ for i in total_iterations:
         while scrape_duration.total_seconds() < SI_sec:
             scrape_duration = datetime.datetime.now() - scrape_start_time
         batch_duration = datetime.datetime.now() - batch_start_time
+    
+    print '* Batch ' + str(i) + ' complete *'
 
 print '** Collection process complete **'
