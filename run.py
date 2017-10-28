@@ -83,8 +83,6 @@ num_routes = route_dict.shape[0]
 counter = num_routes # this counter is used to generate a new batch at each cycle
 
 ## Step 2: Loop through batches, passing each batch to the scrape cycler
-for i in range(total_iterations):
-    print i
 
 for num in range(total_iterations):
     #generate batch by cycling thru the route_dict in intervals of BATCH_SIZE
@@ -114,7 +112,6 @@ for num in range(total_iterations):
             url = route[1]
             capture(csv, url)
             csv.close()
-            print 'captured '+ route[0]
 
         scrape_duration = datetime.datetime.now() - scrape_start_time
         while scrape_duration.total_seconds() < SI_sec:
