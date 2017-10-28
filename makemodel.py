@@ -12,8 +12,9 @@ stratify = Modeling.Tools.stratify_by_hour
 dummify = Modeling.FeatureEng.dummify_pos_stat_time
 dummy_lm = Modeling.LinearModels.ols_dummies_crossval
 
+name = raw_input('Route name: ')
 
-paths = get_stop_paths('Routes/M60')
+paths = get_stop_paths('Routes/'+name)
 
 dfs = {}
 for path in paths:
