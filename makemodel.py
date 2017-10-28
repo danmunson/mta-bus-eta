@@ -24,13 +24,16 @@ for path in paths:
     except Exception as e:
         print(e)
 
-
+#for each stopdf: stratify data by the hour, convert to dummy vals, fit model
 for k, df in dfs.iteritems():
-    #stratify data by the hour, convert to dummy vals, fit model
+    print k + ':'
     strat_df = stratify(df, 'Timestamp')
-    dum_df = dummify(strat_df)
-    cv_eval = dummy_lm(dum_df, linear_model.LinearRegression(), {'-MSE':'neg_mean_absolute_error', '-MAD':'neg_median_absolute_error', 'R^2':'r2'})
-    for score, val in cv_eval.iteritems():
-        print score + ':  ' + str(val) 
-
+    print strat_df.shape
+    print strat_df.head()
+    try:
+        dum_df = dummify(strat_df)
+        cv_eval = dummy_lm(dum_df, linear_model.LinearRegression(), 'neg_mean_absolute_error')
+        print 'MADs:  ' + str(cv_eval) 
+    except Exception as e:
+        print e
     print '--------------'

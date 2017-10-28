@@ -47,7 +47,7 @@ class Read:
                 path = os.path.join(root, fl)
                 df = pd.read_csv(path, header = 0)
                 
-                full = pd.concat([full, df], axis = 1)
+                full = pd.concat([full, df], axis = 'index', ignore_index=True)
         return full
 
 
