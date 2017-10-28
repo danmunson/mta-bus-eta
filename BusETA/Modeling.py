@@ -11,6 +11,7 @@ import os, shutil
 import sys
 from sklearn import linear_model, metrics
 from sklearn import model_selection as mods
+from sklearn import preprocessing as prep
 from collections import Counter
 import random
 
@@ -65,25 +66,12 @@ class Read:
 class FeatureEng:
 
     @classmethod
-    def dummify_pos_stat_time(cls, df):
+    def dummify_postat(cls, df):
         dummdf = df.copy()
-        times = pd.to_datetime(dummdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
-        
-        days = []
-        hours = []
-        for time in list(times):
-            hours.append(time.hour)
-            days.append(time.weekday())
-        dummdf['Hours'] = pd.Series(hours)
-        dummdf['Days'] = pd.Series(days)
-        del dummdf['Timestamp']
-
         for i in range(dummdf.shape[0]):
             status = dummdf.ix[i,'Status']
             if status[-10:] == 'miles away':
-                dummdf.ix[i,'Status'] = status[1:]        
-
-        count = 0
+                dummdf.ix[i,'Status'] = status[1:]
         postats = []
         for i in range(dummdf.shape[0]):
             position = dummdf.ix[i,'Position']
@@ -93,12 +81,49 @@ class FeatureEng:
         dummdf['Postat'] = pd.Series(postats)
         del dummdf['Position']
         del dummdf['Status']
-
-        for col in ['Hours', 'Days', 'Postat']:
-            frame = pd.get_dummies(dummdf.ix[:,col])
-            dummdf = pd.concat([dummdf, frame], axis=1)
-            del dummdf[col]
-
+        frame = pd.get_dummies(dummdf.ix[:,'Postat'])
+        dummdf = pd.concat([dummdf, frame], axis=1)
+        del dummdf['Postat']
         return dummdf
 
+    @classmethod
+    def dummify_pos_only(cls,df):
+        dummdf = df.copy()     
+        poss = []
+        for i in range(dummdf.shape[0]):
+            position = dummdf.ix[i,'Position']
+            poss.append(position)
+        dummdf['Pos'] = pd.Series(poss)
+        del dummdf['Position']
+        del dummdf['Status']
+        frame = pd.get_dummies(dummdf.ix[:,'Pos'])
+        dummdf = pd.concat([dummdf, frame], axis=1)
+        del dummdf['Pos']
+        return dummdf
 
+    @classmethod
+    def continuousToD_dummyDoW(cls, df):
+        newdf = df.copy()
+        times = pd.to_datetime(newdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
+        days = []
+        hours = []
+        for time in list(times):
+            hours.append(float(time.hour + (time.minute/60)))
+            days.append(time.weekday())
+        newdf['TimeOfDay'] = pd.Series(hours)
+        newdf['DayOfWeek'] = pd.Series(days)
+        del newdf['Timestamp']
+        frame = pd.get_dummies(newdf.ix[:,'DayOfWeek'])
+        newdf = pd.concat([newdf, frame], axis=1)
+        del newdf['DayOfWeek']
+        return newdf
+
+    @classmethod
+    def poly_ToD(cls, df, order):
+        time_of_day = df['TimeOfDay']
+        poly_tod = prep.PolynomialFeatures.transform(time_of_day, degree=order)
+        new_df = df
+        del new_df['TimeOfDay']
+        new_df = pd.concat([new_df,poly_tod], axis=1)
+        return new_df
+        
