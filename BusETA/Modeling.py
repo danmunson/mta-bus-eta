@@ -55,7 +55,11 @@ class Read:
         paths = cls.get_stop_paths('Routes/'+route_name)
         stop_dfs = {}
         for path in paths:
-            stop_dfs[path] = cls.read_stop_data(path)
+            try:
+                stop_dfs[path] = cls.read_stop_data(path)
+                print 'loaded ' + path
+            except Exception as e:
+                print e
         return stop_dfs
 
 class FeatureEng:
