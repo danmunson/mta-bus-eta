@@ -29,7 +29,7 @@ for k, df in dfs.iteritems():
     #stratify data by the hour, convert to dummy vals, fit model
     strat_df = stratify(df, 'Timestamp')
     dum_df = dummify(strat_df)
-    cv_eval = dummy_lm(dum_df, linear_model.LinearRegression(), ['neg_mean_absolute_error', 'neg_median_absolute_error', 'r2'])
+    cv_eval = dummy_lm(dum_df, linear_model.LinearRegression(), {'-MSE':'neg_mean_absolute_error', '-MAD':'neg_median_absolute_error', 'R^2':'r2'})
     for score, val in cv_eval.iteritems():
         print score + ':  ' + str(val) 
 

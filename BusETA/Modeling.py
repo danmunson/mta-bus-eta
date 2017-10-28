@@ -96,9 +96,7 @@ class LinearModels:
     def ols_dummies_crossval(cls, df, estim, scores):
         response = df.pop('TimeDelta')
         predictors = df
-        cvscores = {}
-        for score in scores:
-            cvscores[score]= mods.cross_val_score(estim, predictors, response, scoring=score)
+        cvscores = mods.cross_val_score(estim, predictors, response, scoring=scores)
         return cvscores
 
 
