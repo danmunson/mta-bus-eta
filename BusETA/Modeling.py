@@ -50,6 +50,13 @@ class Read:
                 full = pd.concat([full, df], axis = 'index', ignore_index=True)
         return full
 
+    @classmethod
+    def read_all_stops(cls, route_name):
+        paths = cls.get_stop_paths('Routes/'+route_name)
+        stop_dfs = {}
+        for path in paths:
+            stop_dfs[path] = cls.read_stop_data(path)
+        return stop_dfs
 
 class FeatureEng:
 
@@ -89,63 +96,5 @@ class FeatureEng:
             del dummdf[col]
 
         return dummdf
-
-class LinearModels:
-
-    @classmethod
-    def ols_dummies_crossval(cls, df, estim, scores):
-        response = df.pop('TimeDelta')
-        predictors = df
-        cvscores = mods.cross_val_score(estim, predictors, response, scoring=scores)
-        return cvscores
-
-
-class Tools:
-
-    @classmethod
-    def crossvalidate(cls, folds):
-        
-        pass
-
-
-    ## should be used before converting variables to dummies
-    ## this process aims to maximize obs-ct while maintaining equal representation among all values of the given column
-    @classmethod
-    def stratify_by_hour(cls, df, colname):
-        hours = []
-        timeser = pd.to_datetime(df.ix[:,colname], format='%Y-%m-%d %H:%M:%S.%f')
-        for i in range(len(timeser)):
-            hour = timeser[i].hour
-            hours.append(str(hour))
-        hour_ct = Counter(hours)
-        minV = None
-        assign = True
-        for k, v in hour_ct.iteritems():
-            if assign:
-                assign = False
-                minV = v
-                continue
-            if v < minV:
-                minV = v
-        selection_prob = {}
-        
-        for k, v in hour_ct.iteritems():
-            p = float(minV/v)
-            selection_prob[k] = p
-        
-        added = []
-        for i in range(df.shape[0]):
-            p = selection_prob[hours[i]]
-            threshold = random.uniform(0,1)
-            if p >= threshold:
-                obs = df.ix[i,:]
-                added.append(obs)
-        
-        strat_df = pd.DataFrame(added)        
-
-        return strat_df
-
-                
-
 
 
