@@ -79,7 +79,7 @@ class FeatureEng:
     def lapply_std_transform(cls, dfs, poly = 1, pos_only = False):
         new_df_list = []
         for df in dfs:
-            new_df = cls.std_transform(df)
+            new_df = cls.std_transform(df, poly, pos_only)
             new_df_list.append(new_df)
         return new_df_list
 
