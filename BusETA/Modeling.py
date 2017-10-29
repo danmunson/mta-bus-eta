@@ -67,8 +67,8 @@ class FeatureEng:
 
     @classmethod
     def std_transform(cls, df, poly, pos_only):
-        new_df = cls.poly_ToD(df, poly)
-        new_df = cls.continuousToD_dummyDoW(new_df)
+        new_df = cls.continuousToD_dummyDoW(df)
+        new_df = cls.poly_ToD(new_df, poly)
         if pos_only:
             new_df = cls.dummify_pos_only(new_df)
         else:
@@ -78,7 +78,7 @@ class FeatureEng:
     @classmethod
     def lapply_st(cls, dfs, poly = 1, pos_only = False):
         new_df_list = {}
-        for name, df in dfs.iteritesm():
+        for name, df in dfs.iteritems():
             new_df = cls.std_transform(df, poly, pos_only)
             new_df_list[name] = new_df
         return new_df_list
