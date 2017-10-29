@@ -66,6 +66,24 @@ class Read:
 class FeatureEng:
 
     @classmethod
+    def std_transform(cls, df, poly, pos_only):
+        new_df = cls.poly_ToD(df, poly)
+        new_df = cls.continuousToD_dummyDoW(new_df)
+        if pos_only:
+            new_df = cls.dummify_pos_only(new_df)
+        else:
+            new_df = cls.dummify_postat(new_df)
+        return new_df
+
+    @classmethod
+    def lapply_std_transform(cls, dfs, poly = 1, pos_only = False):
+        new_df_list = []
+        for df in dfs:
+            new_df = cls.std_transform(df)
+            new_df_list.append(new_df)
+        return new_df_list
+
+    @classmethod
     def dummify_postat(cls, df):
         dummdf = df.copy()
         for i in range(dummdf.shape[0]):
@@ -127,3 +145,18 @@ class FeatureEng:
         new_df = pd.concat([new_df,poly_tod], axis=1)
         return new_df
         
+class Eval:
+
+    @classmethod
+    def compare_cv_scores(dfs, models, cv_folds = 10):
+        stop_scores = []
+        for df in dfs:
+            response = df.pop('TimeDelta')
+            predictors = df
+            scores = {}
+            for name, model in models.iteritems():
+                cv_score_avg = mean(mods.cross_val_score(model, predictors, response, cv=cv_folds))
+                scores[name] = cv_score_avg
+            stop_scores.append(scores)
+        
+        return pd.DataFrame(stop_scores)
