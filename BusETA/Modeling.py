@@ -152,11 +152,11 @@ class Eval:
     @classmethod
     def compare_cv_scores(cls, dfs, models, cv_folds = 10):
         stop_scores = []
-        for name, df in dfs.iteritems():
+        for stop_name, df in dfs.iteritems():
             response = df.pop('TimeDelta')
             predictors = df
             scores = {}
-            scores['stop':name]
+            scores['stop'] = stop_name
             for name, model in models.iteritems():
                 cv_score_avg = mean(mods.cross_val_score(model, predictors, response, cv=cv_folds))
                 scores[name] = cv_score_avg
