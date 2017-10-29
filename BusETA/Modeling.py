@@ -76,11 +76,11 @@ class FeatureEng:
         return new_df
 
     @classmethod
-    def lapply_std_transform(cls, dfs, poly = 1, pos_only = False):
-        new_df_list = []
-        for df in dfs:
+    def lapply_st(cls, dfs, poly = 1, pos_only = False):
+        new_df_list = {}
+        for name, df in dfs.iteritesm():
             new_df = cls.std_transform(df, poly, pos_only)
-            new_df_list.append(new_df)
+            new_df_list[name] = new_df
         return new_df_list
 
     @classmethod
@@ -150,10 +150,11 @@ class Eval:
     @classmethod
     def compare_cv_scores(dfs, models, cv_folds = 10):
         stop_scores = []
-        for df in dfs:
+        for name, df in dfs.iteritems():
             response = df.pop('TimeDelta')
             predictors = df
             scores = {}
+            scores['stop':name]
             for name, model in models.iteritems():
                 cv_score_avg = mean(mods.cross_val_score(model, predictors, response, cv=cv_folds))
                 scores[name] = cv_score_avg
