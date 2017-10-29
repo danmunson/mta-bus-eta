@@ -77,12 +77,12 @@ class FeatureEng:
 
     @classmethod
     def lapply_st(cls, dfs, poly = 1, pos_only = False):
-        new_df_list = {}
+        new_df_dict = {}
         for name, df in dfs.iteritems():
             new_df = cls.std_transform(df, poly, pos_only)
-            new_df_list[name] = new_df
+            new_df_dict[name] = new_df
             print 'transformed ' + name
-        return new_df_list
+        return new_df_dict
 
     @classmethod
     def dummify_postat(cls, df):
@@ -150,7 +150,7 @@ class FeatureEng:
 class Eval:
 
     @classmethod
-    def compare_cv_scores(dfs, models, cv_folds = 10):
+    def compare_cv_scores(cls, dfs, models, cv_folds = 10):
         stop_scores = []
         for name, df in dfs.iteritems():
             response = df.pop('TimeDelta')
