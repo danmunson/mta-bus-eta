@@ -139,7 +139,8 @@ class FeatureEng:
     @classmethod
     def poly_ToD(cls, df, order):
         time_of_day = df['TimeOfDay']
-        poly_tod = prep.PolynomialFeatures.transform(time_of_day, degree=order)
+        poly_ftrs = prep.PolynomialFeatures()
+        poly_tod = poly_ftrs.transform(time_of_day, degree=order)
         new_df = df
         del new_df['TimeOfDay']
         new_df = pd.concat([new_df,poly_tod], axis=1)
