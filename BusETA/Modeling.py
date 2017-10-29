@@ -81,6 +81,7 @@ class FeatureEng:
         for name, df in dfs.iteritems():
             new_df = cls.std_transform(df, poly, pos_only)
             new_df_list[name] = new_df
+            print 'transformed ' + name
         return new_df_list
 
     @classmethod
