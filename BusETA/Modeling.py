@@ -150,7 +150,7 @@ class FeatureEng:
 class Eval:
 
     @classmethod
-    def compare_cv_scores(cls, dfs, models, cv_folds = 10):
+    def cv_matrix(cls, dfs, models, cv_folds = 10):
         stop_scores = []
         for stop_name, df in dfs.iteritems():
             response = pd.DataFrame(df.pop('TimeDelta'))
@@ -164,6 +164,25 @@ class Eval:
                 for acc in cv_accuracy:
                     total += acc
                 scores[name] = total/float(cv_folds)
+            stop_scores.append(scores)
+        
+        return pd.DataFrame(stop_scores)
+
+    @classmethod
+    def cv_matrix2(cls, dfs, models, cv_folds = 10):
+        stop_scores = []
+        for stop_name, df in dfs.iteritems():
+            response = pd.DataFrame(df.pop('TimeDelta'))
+            predictors = df
+            scores = {}
+            scores['stop'] = stop_name
+            for name, model in models.iteritems():
+                mod_inst = model
+                cv_accuracy = mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds)
+                avg = cv_accuracy.mean()
+                st_d = cv_accuracy.std()
+                scores[name+':avg'] = avg
+                scores[name+':std'] = st_d
             stop_scores.append(scores)
         
         return pd.DataFrame(stop_scores)
