@@ -158,7 +158,7 @@ class Eval:
             scores = {}
             scores['stop'] = stop_name
             for name, model in models.iteritems():
-                mod_inst = model()
+                mod_inst = model
                 cv_accuracy = list(mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds))
                 total = 0
                 for acc in cv_accuracy:
