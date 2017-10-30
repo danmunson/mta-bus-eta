@@ -158,7 +158,7 @@ class Eval:
             scores = {}
             scores['stop'] = stop_name
             for name, model in models.iteritems():
-                cv_score_avg = np.mean(mods.cross_val_score(model, predictors, response, cv=cv_folds).mean())
+                cv_score_avg = mods.cross_val_score(model, predictors, response, cv=cv_folds).mean()
                 scores[name] = cv_score_avg
             stop_scores.append(scores)
         
