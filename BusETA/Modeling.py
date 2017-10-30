@@ -158,11 +158,11 @@ class Eval:
             scores = {}
             scores['stop'] = stop_name
             for name, model in models.iteritems():
-                scores = list(mods.cross_val_score(model, predictors, response, cv=cv_folds))
+                cv_accuracy = list(mods.cross_val_score(model, predictors, response, cv=cv_folds))
                 total = 0
-                for score in scores:
-                    total += score
-                scores[name] = total/cv_folds
+                for acc in cv_accuracy:
+                    total += cv_accuracy
+                scores[name] = total/float(cv_folds)
             stop_scores.append(scores)
         
         return pd.DataFrame(stop_scores)
