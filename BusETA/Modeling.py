@@ -162,7 +162,7 @@ class Eval:
                 cv_accuracy = list(mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds))
                 total = 0
                 for acc in cv_accuracy:
-                    total += cv_accuracy
+                    total += acc
                 scores[name] = total/float(cv_folds)
             stop_scores.append(scores)
         
