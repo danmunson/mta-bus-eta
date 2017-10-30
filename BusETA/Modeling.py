@@ -127,7 +127,7 @@ class FeatureEng:
         days = []
         hours = []
         for time in list(times):
-            hours.append(float(time.hour + (time.minute/60)))
+            hours.append(time.hour + (time.minute/60.0))
             days.append(time.weekday())
         newdf['TimeOfDay'] = pd.Series(hours)
         newdf['DayOfWeek'] = pd.Series(days)
