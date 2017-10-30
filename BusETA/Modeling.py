@@ -153,12 +153,13 @@ class Eval:
     def compare_cv_scores(cls, dfs, models, cv_folds = 10):
         stop_scores = []
         for stop_name, df in dfs.iteritems():
-            response = df.pop('TimeDelta')
+            response = pd.DataFrame(df.pop('TimeDelta'))
             predictors = df
             scores = {}
             scores['stop'] = stop_name
             for name, model in models.iteritems():
-                cv_accuracy = list(mods.cross_val_score(model, predictors, response, cv=cv_folds))
+                mod_inst = model()
+                cv_accuracy = list(mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds))
                 total = 0
                 for acc in cv_accuracy:
                     total += cv_accuracy
