@@ -76,7 +76,7 @@ class FeatureEng:
         return new_df
 
     @classmethod
-    def lapply_st(cls, dfs, poly = 1, pos_only = False):
+    def apply_st(cls, dfs, poly = 1, pos_only = False):
         new_df_dict = {}
         for name, df in dfs.iteritems():
             new_df = cls.std_transform(df, poly, pos_only)
@@ -151,25 +151,6 @@ class Eval:
 
     @classmethod
     def cv_matrix(cls, dfs, models, cv_folds = 10):
-        stop_scores = []
-        for stop_name, df in dfs.iteritems():
-            response = pd.DataFrame(df.pop('TimeDelta'))
-            predictors = df
-            scores = {}
-            scores['stop'] = stop_name
-            for name, model in models.iteritems():
-                mod_inst = model
-                cv_accuracy = list(mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds))
-                total = 0
-                for acc in cv_accuracy:
-                    total += acc
-                scores[name] = total/float(cv_folds)
-            stop_scores.append(scores)
-        
-        return pd.DataFrame(stop_scores)
-
-    @classmethod
-    def cv_matrix2(cls, dfs, models, cv_folds = 10):
         stop_scores = []
         for stop_name, dfi in dfs.iteritems():
             df = dfi.copy()
