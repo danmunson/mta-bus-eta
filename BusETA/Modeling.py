@@ -171,7 +171,8 @@ class Eval:
     @classmethod
     def cv_matrix2(cls, dfs, models, cv_folds = 10):
         stop_scores = []
-        for stop_name, df in dfs.iteritems():
+        for stop_name, dfi in dfs.iteritems():
+            df = dfi.copy()
             response = pd.DataFrame(df.pop('TimeDelta'))
             predictors = df
             scores = {}
