@@ -179,7 +179,7 @@ class Eval:
             scores['stop'] = stop_name
             for name, model in models.iteritems():
                 mod_inst = model
-                cv_accuracy = mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds)
+                cv_accuracy = mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds, scoring='neg_mean_absolute_error')
                 avg = cv_accuracy.mean()
                 st_d = cv_accuracy.std()
                 scores[name+':avg'] = avg
