@@ -172,7 +172,7 @@ class Persistence:
         model_inst.fit(predictors, response)
 
         model_filename = os.path.join(stop_path, 'active_model.pkl')
-        meta_filename = os.path.join(stop_path, 'model_cols.txt')
+        meta_filename = os.path.join(stop_path, 'model_columns.txt')
 
         if os.path.isfile(model_filename):
             os.remove(model_filename)
@@ -198,5 +198,26 @@ class Persistence:
         return joblib.load(path)
 
     @classmethod
-    def get_prediction_input(cls, stop_path, value_dict):
-        return
+    def get_prediction_input(cls, predictors, metafile):
+        predictor_vec = {}
+        column = metafile.readline().strip()
+        while column != '':
+            if column[0:4] == 'day:':   #must represent day of week
+                day = column.split(':')[1]
+                if day == str(predictors['day']):
+                    predictor_vec[column] = 1
+                else:
+                    predictor_vec[column] = 0
+            elif column[0:2] == 't^':   #must represent hours
+                order = float(column.split('^')[1])
+                poly_hr = predictors['hour'] ** order
+                predictor_vec[column] = poly_hr
+            else:   #must represent a postat
+                if column == predictors['postat']:
+                    predictor_vec[column] = 1
+                else:
+                    predictor_vec[column] = 0
+            column = metafile.readline().strip()
+
+        return pd.DataFrame(predictor_vec)
+
