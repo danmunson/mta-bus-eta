@@ -115,7 +115,7 @@ class GetBusData:
 
 
     @classmethod
-    def live_nearest_bus(cls, url, position_df, x_direction, x_stop):
+    def live_nearest_bus(cls, url, position_df, x_direction, x_stop): #!!!! x_direction and x_stop must be passed through cls.normalize()
         ##part A: get the current positions of all buses at this point in time, for a given direction
         page = req.get(url)
         html = page.text
@@ -172,7 +172,7 @@ class GetBusData:
                 if pos == x_pos and (active_stops.ix[i,'status'] == 'approaching' or active_stops.ix[i,'status'] == 'at stop'):
                     continue
                 earlier_positions.append(pos)
-                postat = pos + ':' + active_stops.ix[i,'status']
+                postat = str(pos) + ':' + active_stops.ix[i,'status']
                 poss_nearest[str(pos)] = postat
         
         if len(poss_nearest):

@@ -201,7 +201,8 @@ class Persistence:
         return
 
     @classmethod
-    def get_stop_model(cls, path):
+    def get_stop_model(cls, dirpath):
+        path = os.path.join(dirpath,'active_model.pkl')
         return joblib.load(path)
 
     @classmethod
