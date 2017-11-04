@@ -77,7 +77,7 @@ class FeatureEng:
     def apply_st(cls, dfs, poly = 1):
         new_df_dict = {}
         for name, df in dfs.iteritems():
-            new_df = cls.std_transform(df, poly, pos_only)
+            new_df = cls.std_transform(df, poly)
             new_df_dict[name] = new_df
             print 'transformed ' + name
         return new_df_dict
