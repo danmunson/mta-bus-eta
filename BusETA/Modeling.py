@@ -56,7 +56,7 @@ class Read:
                 path = os.path.join(root, fl)
                 df = pd.read_csv(path, header = 0)
                 full = pd.concat([full, df], axis = 'index', ignore_index=True)
-                
+
         return full
 
     @classmethod
@@ -197,7 +197,7 @@ class Persistence:
     @classmethod
     def train_save_route(cls, dfs, model):
         for stop_name, dfi in dfs.iteritems():
-            cls.train_and_save(stop_name, dfi, model)
+            cls.train_and_save(dfi, model, stop_name)
         return
 
     @classmethod
