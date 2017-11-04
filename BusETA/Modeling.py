@@ -40,16 +40,23 @@ class Read:
     def read_stop_data(cls, stop_path):
         full = None
         for root, dirs, files in os.walk(stop_path):
-            file1 = files.pop(0)
+            
+            csv_files = []
+            for fl in files:
+                ext = os.path.splitext(fl)[1]
+                if ext == '.csv':
+                    csv_files.append(fl)
+            
+            file1 = csv_files.pop(0)
             file1path = os.path.join(root, file1)
             start_df = pd.read_csv(file1path, header = 0)
             full = start_df
             
-            for fl in files:
+            for fl in csv_files:
                 path = os.path.join(root, fl)
                 df = pd.read_csv(path, header = 0)
-                
                 full = pd.concat([full, df], axis = 'index', ignore_index=True)
+                
         return full
 
     @classmethod
