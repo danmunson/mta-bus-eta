@@ -32,7 +32,7 @@ class GetBusData:
         return
 
     @classmethod
-    def normalize(cls, route_name):
+    def normalize(cls, route_name): #exchanges / for __ in order for stop names to be valid directory names
         chars = list(unicode(route_name))
         new_chars = []
         for char in chars:
@@ -99,7 +99,7 @@ class GetBusData:
                     name = stop.contents[0].string
                     active['stop'] = name
                     status = bolds[i+1].string
-                    ## fix for error on Linux version of BS4 (cannot pick up "< 1 stop away", probably due to "<" char)
+                    ## fix for error on Linux (or, possibly, outdated) version of BS4 (cannot pick up "< 1 stop away", probably due to "<" char)
                     if status == None:
                         status = '< 1 stop away'
                     ##
@@ -112,3 +112,77 @@ class GetBusData:
                 continue
         csv.write(unicode(stop_line))
         return
+
+
+    @classmethod
+    def live_nearest_bus(cls, url, position_df, x_direction, x_stop):
+        ##part A: get the current positions of all buses at this point in time, for a given direction
+        page = req.get(url)
+        html = page.text
+        time = datetime.datetime.now()
+        soup = BS(html, 'lxml')
+        bolds = soup.find_all('strong')
+        active_stops = []
+        active = {}
+        raw_direction_name = None
+        for i in range(len(bolds)):
+            stop = bolds[i]
+            try:
+                ch_name = stop.contents[0].name
+                par_name = stop.parent.name
+                if ch_name == 'a' and par_name == 'li': #then assume it represents the bolded stop name, and a status will be the next element
+                    stop_name = stop.contents[0].string
+                    direction_name = cls.get_direction_title(bolds[i+1])
+                    if cls.normalize(direction_name) == x_direction:
+                        active['stop'] = cls.normalize(stop_name)
+                        status = bolds[i+1].string
+                        ## fix for error on Linux (or, possibly, outdated) version of BS4 (cannot pick up "< 1 stop away", probably due to "<" char)
+                        if status == None:
+                            status = '< 1 stop away'
+                        active['status'] = status
+                        active['position'] = 0
+                        raw_direction_name = direction_name
+                        active_stops.append(active)
+                        active = {}
+            except:
+                continue
+        
+        ##part B: get the position (order) of all of the bus positions
+        active_stops = pd.DataFrame(active_stops) #will only contain stops that are of the appropriate direction
+        new_pos_df = position_df[position_df.ix[:,0]==raw_direction_name] #subsets the position dataframe so it only contains those of the appropriate direction
+        position_dict = {}
+        for i in range(new_pos_df.shape[0]):
+            stop = cls.normalize(new_pos_df.ix[i,1])
+            pos = float(new_pos_df.ix[i,2])
+            position_dict[stop] = pos
+        for i in range(active_stops.shape[0]):
+            stop = active_stops.ix[i,'stop']
+            active_stops.ix[i,'position'] = position_dict[stop]
+
+        ##part C: identify the nearest bus, return data
+        x_pos = float(position_dict[x_stop])
+        found = False
+        poss_nearest = {}
+        earlier_positions = []
+        for i in range(active_stops.shape[0]):
+            pos = active_stops.ix[i,'position']
+            if pos > x_pos:
+                continue
+            else:
+                if pos == x_pos and (active_stops.ix[i,'status'] == 'approaching' or active_stops.ix[i,'status'] == 'at stop'):
+                    continue
+                earlier_positions.append(pos)
+                postat = pos + ':' + active_stops.ix[i,'status']
+                poss_nearest[str(pos)] = postat
+        
+        if len(poss_nearest):
+            nearest_postat = poss_nearest[str(max(earlier_positions))]
+        else:
+            nearest_postat = 'XXXX' #if there are no earlier bus positions, a prediction cannot be made, so XXXX serves as a flag
+
+        hour = time.hour + (time.minute/60.0)
+        day = time.weekday()
+        return {'day':day,'hour':hour,'postat':nearest_postat}
+
+
+

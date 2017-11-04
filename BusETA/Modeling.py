@@ -12,6 +12,7 @@ import sys
 from sklearn import linear_model, metrics
 from sklearn import model_selection as mods
 from sklearn import preprocessing as prep
+from sklearn.externals import joblib
 from collections import Counter
 import random
 
@@ -66,17 +67,14 @@ class Read:
 class FeatureEng:
 
     @classmethod
-    def std_transform(cls, df, poly, pos_only):
+    def std_transform(cls, df, poly):
         new_df = cls.continuousToD_dummyDoW(df)
         new_df = cls.poly_ToD(new_df, poly)
-        if pos_only:
-            new_df = cls.dummify_pos_only(new_df)
-        else:
-            new_df = cls.dummify_postat(new_df)
+        new_df = cls.dummify_postat(new_df)
         return new_df
 
     @classmethod
-    def apply_st(cls, dfs, poly = 1, pos_only = False):
+    def apply_st(cls, dfs, poly = 1):
         new_df_dict = {}
         for name, df in dfs.iteritems():
             new_df = cls.std_transform(df, poly, pos_only)
@@ -106,21 +104,6 @@ class FeatureEng:
         return dummdf
 
     @classmethod
-    def dummify_pos_only(cls,df):
-        dummdf = df.copy()     
-        poss = []
-        for i in range(dummdf.shape[0]):
-            position = dummdf.ix[i,'Position']
-            poss.append(position)
-        dummdf['Pos'] = pd.Series(poss)
-        del dummdf['Position']
-        del dummdf['Status']
-        frame = pd.get_dummies(dummdf.ix[:,'Pos'])
-        dummdf = pd.concat([dummdf, frame], axis=1)
-        del dummdf['Pos']
-        return dummdf
-
-    @classmethod
     def continuousToD_dummyDoW(cls, df):
         newdf = df.copy()
         times = pd.to_datetime(newdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
@@ -133,24 +116,32 @@ class FeatureEng:
         newdf['DayOfWeek'] = pd.Series(days)
         del newdf['Timestamp']
         frame = pd.get_dummies(newdf.ix[:,'DayOfWeek'])
+        cols = []
+        for day in list(frame.columns):
+            cols.append('day:'+str(day))
+        frame.columns = cols
         newdf = pd.concat([newdf, frame], axis=1)
         del newdf['DayOfWeek']
         return newdf
 
-    @classmethod
-    def poly_ToD(cls, df, order):
+    @classmethod    #converts time_of_day variable into a polynomial set of variables
+    def poly_ToD(cls, df, order): 
         time_of_day = pd.DataFrame(df['TimeOfDay'])
         poly_ftrs = prep.PolynomialFeatures(degree=order)
         poly_tod = pd.DataFrame(poly_ftrs.fit_transform(time_of_day))
         new_df = df
         del new_df['TimeOfDay']
+        cols = []
+        for i in range(order):
+            cols.append('t^'+str(i))
+        poly_tod.columns = cols
         new_df = pd.concat([new_df,poly_tod], axis=1)
         return new_df
         
 class Eval:
 
-    @classmethod
-    def cv_matrix(cls, dfs, models, cv_folds = 10):
+    @classmethod    #returns a df that shows the mean & std of the cross-validated eval_metric for each stop and each model
+    def cv_matrix(cls, dfs, models, cv_folds = 10, eval_metric='neg_mean_absolute_error'):
         stop_scores = []
         for stop_name, dfi in dfs.iteritems():
             df = dfi.copy()
@@ -160,7 +151,7 @@ class Eval:
             scores['stop'] = stop_name
             for name, model in models.iteritems():
                 mod_inst = model
-                cv_accuracy = mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds, scoring='neg_mean_absolute_error')
+                cv_accuracy = mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds, scoring=eval_metric)
                 avg = cv_accuracy.mean()
                 st_d = cv_accuracy.std()
                 scores[name+':avg'] = avg
@@ -168,3 +159,44 @@ class Eval:
             stop_scores.append(scores)
         
         return pd.DataFrame(stop_scores)
+
+
+class Persistence:
+
+    @classmethod
+    def train_and_save(cls, dfi, model, stop_path):
+        df = dfi.copy()
+        response = pd.DataFrame(df.pop('TimeDelta'))
+        predictors = df
+        model_inst = model
+        model_inst.fit(predictors, response)
+
+        model_filename = os.path.join(stop_path, 'active_model.pkl')
+        meta_filename = os.path.join(stop_path, 'model_cols.txt')
+
+        if os.path.isfile(model_filename):
+            os.remove(model_filename)
+            joblib.dump(model_inst, model_filename)
+        else:
+            joblib.dump(model_inst, model_filename)
+        
+        meta = io.open(meta_filename, 'w')
+        for col in list(predictors.columns):
+            meta.write(unicode(col+'\n'))
+        meta.close()
+
+        return
+
+    @classmethod
+    def train_save_route(cls, dfs, model):
+        for stop_name, dfi in dfs.iteritems():
+            cls.train_and_save(stop_name, dfi, model)
+        return
+
+    @classmethod
+    def get_stop_model(cls, path):
+        return joblib.load(path)
+
+    @classmethod
+    def get_prediction_input(cls, stop_path, value_dict):
+        return
