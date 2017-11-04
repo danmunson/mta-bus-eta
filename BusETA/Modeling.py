@@ -132,7 +132,7 @@ class FeatureEng:
         new_df = df
         del new_df['TimeOfDay']
         cols = []
-        for i in range(order):
+        for i in range(order+1):
             cols.append('t^'+str(i))
         poly_tod.columns = cols
         new_df = pd.concat([new_df,poly_tod], axis=1)
