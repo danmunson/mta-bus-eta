@@ -14,7 +14,7 @@ get_pred_input = Modeling.Persistence.get_prediction_input
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-ip_addr = sys.argv[0]
+ip_addr = sys.argv[1]
 
 app = Flask(__name__)
 
