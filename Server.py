@@ -53,16 +53,16 @@ def route(routename, direction):
     return render_template('stops.html', the_stops=the_stops, direction_name=direction)
 
 
-@app.route('/<routename>/<direction>/<stop>')
-def get_eta(routename, direction, stop):
-    stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
+#@app.route('/<routename>/<direction>/<stop>')
+#def get_eta(routename, direction, stop):
+#    stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
     #model = get_model(stop_path)
 
-    route_dict = pd.read_csv('route_dict.csv', header=None)
-    source_url = None
-    for i in range(route_dict.shape[0]):
-        if route_dict.ix[i,0] == routename:
-            source_url = route_dict.ix[i,1]
+#    route_dict = pd.read_csv('route_dict.csv', header=None)
+#    source_url = None
+#    for i in range(route_dict.shape[0]):
+#        if route_dict.ix[i,0] == routename:
+#            source_url = route_dict.ix[i,1]
 
     #position_df = pd.read_csv('Routes/'+routename+'/positioning.csv', header=None)
     #live_data = get_live_data(source_url, position_df, direction, stop)
@@ -72,7 +72,7 @@ def get_eta(routename, direction, stop):
     #prediction = model.predict(pred_vec)
 
     #metafile.close()
-    return 'XX minutes'
+#    return 'XX minutes'
 
 if __name__ == '__main__':
     app.run(host=ip_addr, port=port)
