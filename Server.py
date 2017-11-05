@@ -14,6 +14,8 @@ get_pred_input = Modeling.Persistence.get_prediction_input
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
+ip_addr = sys.argv[0]
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -72,6 +74,6 @@ def get_eta(routename, direction, stop):
     return 'XX minutes'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=ip_addr)
 else:
     print 'must run directly'
