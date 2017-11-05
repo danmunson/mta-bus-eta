@@ -53,8 +53,8 @@ def route(routename, direction):
     return render_template('stops.html', the_stops=the_stops, direction_name=direction)
 
 
-#@app.route('/<routename>/<direction>/<stop>')
-#def get_eta(routename, direction, stop):
+@app.route('/<routename>/<direction>/<stop>')
+def get_eta(routename, direction, stop):
 #    stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
     #model = get_model(stop_path)
 
@@ -72,7 +72,7 @@ def route(routename, direction):
     #prediction = model.predict(pred_vec)
 
     #metafile.close()
-#    return 'XX minutes'
+    return 'YAY!'
 
 if __name__ == '__main__':
     app.run(host=ip_addr, port=port)
