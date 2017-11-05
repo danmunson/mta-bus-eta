@@ -15,6 +15,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 ip_addr = sys.argv[1]
+port = sys.argv[2]
 
 app = Flask(__name__)
 
@@ -74,6 +75,6 @@ def get_eta(routename, direction, stop):
     return 'XX minutes'
 
 if __name__ == '__main__':
-    app.run(host=ip_addr)
+    app.run(host=ip_addr, port=port)
 else:
     print 'must run directly'
