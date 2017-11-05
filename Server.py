@@ -64,14 +64,14 @@ def get_eta(routename, direction, stop):
         if route_dict.ix[i,0] == routename:
             source_url = route_dict.ix[i,1]
 
-    position_df = pd.read_csv('Routes/'+routename+'/positioning.csv', header=None)
-    live_data = get_live_data(source_url, position_df, direction, stop)
-    metafile = io.open(stop_path, 'r')
+    #position_df = pd.read_csv('Routes/'+routename+'/positioning.csv', header=None)
+    #live_data = get_live_data(source_url, position_df, direction, stop)
+    #metafile = io.open(stop_path, 'r')
     #pred_vec = get_pred_input(live_data, metafile)
 
     #prediction = model.predict(pred_vec)
 
-    metafile.close()
+    #metafile.close()
     return 'XX minutes'
 
 if __name__ == '__main__':
