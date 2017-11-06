@@ -30,9 +30,9 @@ def return_prediction(routename, direction, stop):
         prediction = model.predict(pred_vec)
         metafile.close()  
         
-        return str(prediction)
+        return str(prediction[0])
     except Exception as e:
-        return str(e) + str(prediction)
+        return str(e)
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
