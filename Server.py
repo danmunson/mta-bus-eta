@@ -31,8 +31,8 @@ def return_prediction(routename, direction, stop):
         metafile.close()  
         
         return str(prediction)
-    except:
-        return "No data"
+    except Exception as e:
+        return str(e)
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
