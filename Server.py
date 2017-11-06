@@ -32,7 +32,7 @@ def return_prediction(routename, direction, stop):
         
         return str(prediction)
     except Exception as e:
-        return str(e)
+        return str(e) + str(prediction)
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
