@@ -25,7 +25,7 @@ def return_prediction(routename, direction, stop):
         position_df = pd.read_csv('Routes/'+routename+'/positioning.csv', header=None)
         live_data = get_live_data(source_url, position_df, direction, stop)
         #metafile = io.open(stop_path+'/model_columns.txt', 'r')
-        pred_vec = get_pred_input(live_data, metafile)
+        #pred_vec = get_pred_input(live_data, metafile)
 
         #prediction = model.predict(pred_vec)
         #metafile.close()  
