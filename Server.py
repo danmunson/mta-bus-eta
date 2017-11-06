@@ -76,7 +76,7 @@ def route(routename, direction):
     return render_template('stops.html', the_stops=the_stops, direction_name=direction)
 
 
-@app.route('/<routename>/<direction>/<stop>')
+@app.route('<placeholer>/eta/<routename>/<direction>/<stop>')
 def get_eta(routename, direction, stop):
     prediction = return_prediction(routename, direction, stop)
     return prediction

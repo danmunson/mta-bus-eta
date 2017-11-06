@@ -115,7 +115,7 @@
           $('.eta-box').css( 'cursor', 'pointer');
 
           $('.eta-box').on('click', function(event){
-            var ajax_url = this.id;
+            var ajax_url = 'eta/'+this.id;
             var eta_box = this;
             $.ajax({
                 url: ajax_url,
