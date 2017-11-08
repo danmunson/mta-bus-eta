@@ -26,7 +26,7 @@ def return_prediction(routename, direction, stop):
         live_data = get_live_data(source_url, position_df, direction, stop)
 
         if live_data['postat'] == 'XXXX':   #indicates there are not enough earlier stops to make a prediction
-            return str('No data')
+            return str('No data :(')
 
         metafile = io.open(stop_path+'/model_columns.txt', 'r')
         pred_vec = get_pred_input(live_data, metafile)
@@ -36,7 +36,7 @@ def return_prediction(routename, direction, stop):
         
         return str(prediction[0])
     except Exception as e:
-        return str(e)
+        return str('No data :(')
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
