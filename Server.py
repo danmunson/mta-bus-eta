@@ -14,7 +14,7 @@ get_pred_input = Modeling.Persistence.get_prediction_input
 def return_prediction(routename, direction, stop):
     try:
         stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
-        model = get_model(stop_path)
+        #model = get_model(stop_path)
 
         route_dict = pd.read_csv('route_dict.csv', header=None)
         source_url = None
@@ -27,7 +27,7 @@ def return_prediction(routename, direction, stop):
         metafile = io.open(stop_path+'/model_columns.txt', 'r')
         pred_vec = get_pred_input(live_data, metafile)
 
-        prediction = model.predict(pred_vec)
+        #prediction = model.predict(pred_vec)
         metafile.close()  
         
         return str(live_data)
