@@ -12,27 +12,31 @@ get_model = Modeling.Persistence.get_stop_model
 get_pred_input = Modeling.Persistence.get_prediction_input
 
 def return_prediction(routename, direction, stop):
-    #try:
-    stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
-    #model = get_model(stop_path)
+    try:
+        stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
+        model = get_model(stop_path)
 
-    route_dict = pd.read_csv('route_dict.csv', header=None)
-    source_url = None
-    for i in range(route_dict.shape[0]):
-        if route_dict.ix[i,0] == routename:
-            source_url = route_dict.ix[i,1]
+        route_dict = pd.read_csv('route_dict.csv', header=None)
+        source_url = None
+        for i in range(route_dict.shape[0]):
+            if route_dict.ix[i,0] == routename:
+                source_url = route_dict.ix[i,1]
 
-    position_df = pd.read_csv('Routes/'+routename+'/positioning.csv', header=None)
-    live_data = get_live_data(source_url, position_df, direction, stop)
-    metafile = io.open(stop_path+'/model_columns.txt', 'r')
-    pred_vec = get_pred_input(live_data, metafile)
+        position_df = pd.read_csv('Routes/'+routename+'/positioning.csv', header=None)
+        live_data = get_live_data(source_url, position_df, direction, stop)
 
-    #prediction = model.predict(pred_vec)
-    metafile.close()  
-    
-    return str(live_data)
-    #except Exception as e:
-    #    return str(e)
+        if live_data['postat'] == 'XXXX':   #indicates there are not enough earlier stops to make a prediction
+            return str('No data')
+
+        metafile = io.open(stop_path+'/model_columns.txt', 'r')
+        pred_vec = get_pred_input(live_data, metafile)
+
+        prediction = model.predict(pred_vec)
+        metafile.close()  
+        
+        return str(prediction[0])
+    except Exception as e:
+        return str(e)
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
