@@ -30,7 +30,7 @@ def return_prediction(routename, direction, stop):
         prediction = model.predict(pred_vec)
         metafile.close()  
         
-        return str(pred_vec)
+        return str(live_data)
     except Exception as e:
         return str(e)
 
