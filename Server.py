@@ -30,11 +30,12 @@ def return_prediction(routename, direction, stop):
 
         metafile = io.open(stop_path+'/model_columns.txt', 'r')
         pred_vec = get_pred_input(live_data, metafile)
+        metafile.close()
 
         prediction = model.predict(pred_vec)
-        metafile.close()  
+        mins = int(prediction[0]/60)
         
-        return str(prediction[0])
+        return str(mins) + ' minutes away'
     except Exception as e:
         return str('No data :(')
 
