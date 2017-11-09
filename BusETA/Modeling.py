@@ -150,6 +150,8 @@ class Eval:
     @classmethod    #returns a df that shows the mean & std of the cross-validated eval_metric for each stop and each model
     def cv_matrix(cls, dfs, models, cv_folds = 5, eval_metric='neg_mean_absolute_error'):
         stop_scores = []
+        iterations = len(dfs)*len(models)
+        count = 1
         for stop_name, dfi in dfs.iteritems():
             df = dfi.copy()
             response = np.ravel(pd.DataFrame(df.pop('TimeDelta')))
@@ -159,10 +161,12 @@ class Eval:
             for name, model in models.iteritems():
                 mod_inst = model
                 cv_accuracy = mods.cross_val_score(mod_inst, predictors, response, cv=cv_folds, scoring=eval_metric)
+                print 'finished '+ str(count)+ '/'+ str(iterations)
                 avg = cv_accuracy.mean()
                 st_d = cv_accuracy.std()
                 scores[name+':avg'] = avg
                 scores[name+':std'] = st_d
+                count += 1
             stop_scores.append(scores)
         
         return pd.DataFrame(stop_scores)
