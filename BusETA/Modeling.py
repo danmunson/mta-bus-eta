@@ -148,11 +148,11 @@ class FeatureEng:
 class Eval:
 
     @classmethod    #returns a df that shows the mean & std of the cross-validated eval_metric for each stop and each model
-    def cv_matrix(cls, dfs, models, cv_folds = 10, eval_metric='neg_mean_absolute_error'):
+    def cv_matrix(cls, dfs, models, cv_folds = 5, eval_metric='neg_mean_absolute_error'):
         stop_scores = []
         for stop_name, dfi in dfs.iteritems():
             df = dfi.copy()
-            response = pd.DataFrame(df.pop('TimeDelta'))
+            response = np.ravel(pd.DataFrame(df.pop('TimeDelta')))
             predictors = df
             scores = {}
             scores['stop'] = stop_name
