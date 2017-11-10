@@ -9,5 +9,3 @@ save = md.Persistence.train_save_route
 
 route = sys.argsv[1]
 a = sys.argsv[2]
-
-models = {'Ridge':linear_model.Ridge(alpha=a),'Lasso':linear_model.Lasso(alpha=a),'OLS':linear_model.LinearRegression(),'SVR':svm.SVR(),'Tree':tree.DecisionTreeRegressor(),'RandForest':ensemble.RandomForestRegressor(criterion='mae')}

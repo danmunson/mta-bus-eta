@@ -15,6 +15,8 @@ from sklearn import preprocessing as prep
 from sklearn.externals import joblib
 from collections import Counter
 import random
+from BusETA import DataCollection as Dc
+
 
 
 class Read:
@@ -231,5 +233,5 @@ class Persistence:
                     predictor_vec[column] = [0]
             column = metafile.readline().strip()
 
-        return pd.DataFrame(predictor_vec)
+        return pd.DataFrame(predictor_vec), predictor_vec
 
