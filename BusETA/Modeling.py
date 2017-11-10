@@ -232,6 +232,12 @@ class Persistence:
                 else:
                     predictor_vec[column] = [0]
             column = metafile.readline().strip()
+        
+        pred_vec = pd.DataFrame(predictor_vec)
+        positives = {}
+        for k, el in predictor_vec.iteritems():
+            if el[0] != 0:
+                positives[k] = el[0]
 
-        return pd.DataFrame(predictor_vec), predictor_vec
+        return pred_vec, positives
 
