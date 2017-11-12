@@ -153,7 +153,7 @@ class GetBusData:
         new_pos_df.reset_index()
         position_dict = {}
         #
-        return {'day':day,'hour':hour,'postat':str(new_pos_df)}
+        return {'day':11,'hour':11,'postat':str(new_pos_df)}
         #
         for i in range(new_pos_df.shape[0]):
             stop = cls.normalize(new_pos_df.ix[i,1])
