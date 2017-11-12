@@ -153,7 +153,10 @@ class GetBusData:
         new_pos_df.reset_index()
         position_dict = {}
         for i in range(new_pos_df.shape[0]):
-            stop = cls.normalize(new_pos_df.ix[i,1])
+            try:
+                stop = cls.normalize(new_pos_df.ix[i,1])
+            except:
+                return new_pos_df.shape
             pos = float(new_pos_df.ix[i,2])
             position_dict[stop] = pos
         for i in range(active_stops.shape[0]):
