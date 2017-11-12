@@ -152,11 +152,11 @@ class GetBusData:
         new_pos_df = position_df[position_df.ix[:,0]==raw_direction_name] #subsets the position dataframe so it only contains those of the appropriate direction
         new_pos_df.reset_index()
         position_dict = {}
+        #
+        return {'day':day,'hour':hour,'postat':str(new_pos_df)}
+        #
         for i in range(new_pos_df.shape[0]):
-            try:
-                stop = cls.normalize(new_pos_df.ix[i,1])
-            except:
-                return new_pos_df.shape
+            stop = cls.normalize(new_pos_df.ix[i,1])
             pos = float(new_pos_df.ix[i,2])
             position_dict[stop] = pos
         for i in range(active_stops.shape[0]):
