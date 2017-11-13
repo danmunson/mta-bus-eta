@@ -35,7 +35,7 @@ def return_prediction(routename, direction, stop):
     prediction = model.predict(pred_vec)
     mins = int(prediction[0]/60)
     
-    return str(mins) + 'min : ' + str(live_data)
+    return str(mins) + 'min : ' + str(pred_dict)
     #except Exception as e:
     #    return 'Exception: ' + str(e)
 
