@@ -126,7 +126,7 @@ class GetBusData:
         bolds = soup.find_all('strong')
         active_stops = []
         active = {}
-        raw_direction_name = None
+        raw_direction_name = 'Placeholder'
         for i in range(len(bolds)):
             stop = bolds[i]
             try:
