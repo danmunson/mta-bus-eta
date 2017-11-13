@@ -120,6 +120,8 @@ class GetBusData:
         page = req.get(url)
         html = page.text
         time = datetime.datetime.now()
+        hour = time.hour + (time.minute/60.0)
+        day = time.weekday()
         soup = BS(html, 'lxml')
         bolds = soup.find_all('strong')
         active_stops = []
@@ -147,14 +149,13 @@ class GetBusData:
             except:
                 continue
         
+        return {'day':day,'hour':hour,'postat':raw_direction_name}
+
         ##part B: get the position (order) of all of the bus positions
         active_stops = pd.DataFrame(active_stops) #will only contain stops that are of the appropriate direction
         new_pos_df = position_df[position_df.ix[:,0]==raw_direction_name] #subsets the position dataframe so it only contains those of the appropriate direction
         new_pos_df.reset_index()
         position_dict = {}
-        #
-        return {'day':11,'hour':11,'postat':str(new_pos_df)}
-        #
         for i in range(new_pos_df.shape[0]):
             stop = cls.normalize(new_pos_df.ix[i,1])
             pos = float(new_pos_df.ix[i,2])
@@ -184,8 +185,6 @@ class GetBusData:
         else:
             nearest_postat = 'XXXX' #if there are no earlier bus positions, a prediction cannot be made, so XXXX serves as a flag
 
-        hour = time.hour + (time.minute/60.0)
-        day = time.weekday()
         return {'day':day,'hour':hour,'postat':nearest_postat}
 
 
