@@ -152,10 +152,8 @@ class GetBusData:
         ##part B: get the position (order) of all of the bus positions
         active_stops = pd.DataFrame(active_stops) #will only contain stops that are of the appropriate direction
         new_pos_df = position_df[position_df.ix[:,0]==raw_direction_name] #subsets the position dataframe so it only contains those of the appropriate direction
-        new_pos_df.reset_index()
+        new_pos_df = new_pos_df.reset_index()
         position_dict = {}
-
-        return {'day':day,'hour':hour,'postat':str(new_pos_df.shape)}
 
         for i in range(new_pos_df.shape[0]):
             stop = cls.normalize(new_pos_df.ix[i,1])
