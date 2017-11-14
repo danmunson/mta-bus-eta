@@ -9,9 +9,10 @@ import io
 
 get_live_data = DataCollection.GetBusData.live_nearest_bus
 get_model = Modeling.Persistence.get_stop_model
-get_pred_input = Modeling.Persistence.get_prediction_input
+get_lm_pred_input = Modeling.Persistence.get_lm_prediction_input
+get_dt_pred_input = Modeling.Persistence.get_dt_prediction_input
 
-def return_prediction(routename, direction, stop):
+def return_prediction(routename, direction, stop, current_model_type):
     #try:
     stop_path = os.path.join('Routes', os.path.join(routename, os.path.join(direction, stop)))
     model = get_model(stop_path)
@@ -26,11 +27,17 @@ def return_prediction(routename, direction, stop):
     live_data = get_live_data(source_url, position_df, direction, stop)
 
     if live_data['postat'] == 'XXXX':   #indicates there are not enough earlier stops to make a prediction
-        return str('No data :(')
-
-    metafile = io.open(stop_path+'/model_columns.txt', 'r')
-    pred_vec, pred_dict = get_pred_input(live_data, metafile)
-    metafile.close()
+        return str('No nearby buses.')
+    
+    pred_vec = None
+    pred_dict = None
+    
+    if current_model_type == 'lm':
+        metafile = io.open(stop_path+'/model_columns.txt', 'r')
+        pred_vec, pred_dict = get_lm_pred_input(live_data, metafile)
+        metafile.close()
+    elif current_model_type == 'dt':
+        pred_vec, pred_dict = get_dt_pred_input(live_data, metafile)
 
     prediction = model.predict(pred_vec)
     mins = int(prediction[0]/60)
@@ -44,6 +51,7 @@ sys.setdefaultencoding('utf8')
 
 ip_addr = sys.argv[1]
 port = sys.argv[2]
+current_model_type = sys.argv[3]    #sad, sorry shortcut
 
 app = Flask(__name__)
 
@@ -83,7 +91,7 @@ def route(routename, direction):
 
 @app.route('/<routename>/eta/<direction>/<stop>')
 def get_eta(routename, direction, stop):
-    prediction = return_prediction(routename, direction, stop)
+    prediction = return_prediction(routename, direction, stop, current_model_type)
     return prediction
 
 if __name__ == '__main__':

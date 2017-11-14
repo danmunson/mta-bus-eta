@@ -75,24 +75,52 @@ class Read:
 
 class FeatureEng:
 
-    @classmethod
-    def std_transform(cls, df, poly):
-        new_df = cls.continuousToD_dummyDoW(df)
+    @classmethod  #standard linear model transform
+    def std_lm_transform(cls, df, poly, drop_one):
+        new_df = cls.continuousToD_dummyDoW(df, drop_one)
         new_df = cls.poly_ToD(new_df, poly)
-        new_df = cls.dummify_postat(new_df)
+        new_df = cls.dummify_postat(new_df, drop_one)
         return new_df
 
     @classmethod
-    def apply_st(cls, dfs, poly = 1):
+    def apply_SLT(cls, dfs, poly = 1, drop_one=True):
         new_df_dict = {}
         for name, df in dfs.iteritems():
-            new_df = cls.std_transform(df, poly)
+            new_df = cls.std_lm_transform(df, poly, drop_one)
+            new_df_dict[name] = new_df
+            print 'transformed ' + name
+        return new_df_dict
+
+    @classmethod  #standard decision tree transform
+    def std_dt_transform(cls, df):
+        new_df = cls.separate_ToD_DoW(df)
+        return new_df
+
+    @classmethod
+    def apply_SDT(cls, dfs):
+        new_df_dict = {}
+        for name, df in dfs.iteritems():
+            new_df = cls.std_dt_transform(df)
             new_df_dict[name] = new_df
             print 'transformed ' + name
         return new_df_dict
 
     @classmethod
-    def dummify_postat(cls, df):
+    def separate_ToD_DoW(cls, df):
+        newdf = df.copy()
+        times = pd.to_datetime(newdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
+        days = []
+        hours = []
+        for time in list(times):
+            hours.append(time.hour + (time.minute/60.0))
+            days.append(time.weekday())
+        newdf['TimeOfDay'] = pd.Series(hours)
+        newdf['DayOfWeek'] = pd.Series(days)
+        del newdf['Timestamp']
+        return newdf
+
+    @classmethod
+    def dummify_postat(cls, df, drop_one):
         dummdf = df.copy()
         for i in range(dummdf.shape[0]):
             status = dummdf.ix[i,'Status']
@@ -107,24 +135,15 @@ class FeatureEng:
         dummdf['Postat'] = pd.Series(postats)
         del dummdf['Position']
         del dummdf['Status']
-        frame = pd.get_dummies(dummdf.ix[:,'Postat'])
+        frame = pd.get_dummies(dummdf.ix[:,'Postat'], drop_first=drop_one)
         dummdf = pd.concat([dummdf, frame], axis=1)
         del dummdf['Postat']
         return dummdf
 
     @classmethod
-    def continuousToD_dummyDoW(cls, df):
-        newdf = df.copy()
-        times = pd.to_datetime(newdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
-        days = []
-        hours = []
-        for time in list(times):
-            hours.append(time.hour + (time.minute/60.0))
-            days.append(time.weekday())
-        newdf['TimeOfDay'] = pd.Series(hours)
-        newdf['DayOfWeek'] = pd.Series(days)
-        del newdf['Timestamp']
-        frame = pd.get_dummies(newdf.ix[:,'DayOfWeek'])
+    def continuousToD_dummyDoW(cls, df, drop_one):
+        newdf = cls.separate_ToD_DoW(df)
+        frame = pd.get_dummies(newdf.ix[:,'DayOfWeek'], drop_first=drop_one)
         cols = []
         for day in list(frame.columns):
             cols.append('day:'+str(day))
@@ -212,7 +231,7 @@ class Persistence:
         return joblib.load(path)
 
     @classmethod
-    def get_prediction_input(cls, predictors, metafile):
+    def get_lm_prediction_input(cls, predictors, metafile): ## metafile is needed because # of columns can differ
         predictor_vec = {}
         column = metafile.readline().strip()
         while column != '':
@@ -241,3 +260,19 @@ class Persistence:
 
         return pred_vec, positives
 
+    @classmethod
+    def get_dt_prediction_input(cls, predictors): ## no metafile needed because columns are pre-determined
+        predictor_vec = {}
+        predictor_vec['DayOfWeek'] = predictors['day']
+        predictor_vec['TimeOfDay'] = predictors['hour']
+
+        split_postat = predictors['postat'].split(':')
+        predictor_vec['Position'] = split_postat[0]
+        status = split_postat[1]
+        if status[-10:] == 'miles away':
+            predictor_vec['Status'] = status[1:]
+        else:
+            predictor_vec['Status'] = status
+
+        pred_vec = pd.DataFrame(predictor_vec)
+        return pred_vec, predictor_vec
