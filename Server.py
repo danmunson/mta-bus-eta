@@ -27,18 +27,23 @@ def return_prediction(routename, direction, stop, current_model_type):
     live_data = get_live_data(source_url, position_df, direction, stop)
 
     if live_data['postat'] == 'XXXX':   #indicates there are not enough earlier stops to make a prediction
-        return str('No nearby buses.')
+        return 'No nearby buses. Try again soon.'
     
     pred_vec = None
     pred_dict = None
-    
+
     if current_model_type == 'lm':
         metafile = io.open(stop_path+'/model_columns.txt', 'r')
-        pred_vec, pred_dict = get_lm_pred_input(live_data, metafile)
+        pred_vec, pred_dict, postat_bool = get_lm_pred_input(live_data, metafile)
         metafile.close()
+        if not postat_bool:
+            return 'Bus out of range. Try again soon.'
     elif current_model_type == 'dt':
-        pred_vec, pred_dict = get_dt_pred_input(live_data, metafile)
-
+        try:
+            pred_vec, pred_dict = get_dt_pred_input(live_data, metafile)
+        except Exception as e:
+            return str(e)
+            #return 'Bus out of range. Try again soon.'
     prediction = model.predict(pred_vec)
     mins = int(prediction[0]/60)
     

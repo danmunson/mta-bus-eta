@@ -234,6 +234,7 @@ class Persistence:
     def get_lm_prediction_input(cls, predictors, metafile): ## metafile is needed because # of columns can differ
         predictor_vec = {}
         column = metafile.readline().strip()
+        postat_bool = False
         while column != '':
             if column[0:4] == 'day:':   #must represent day of week
                 day = column.split(':')[1]
@@ -248,6 +249,7 @@ class Persistence:
             else:   #must represent a postat
                 if column == predictors['postat']:
                     predictor_vec[column] = [1]
+                    postat_bool = True
                 else:
                     predictor_vec[column] = [0]
             column = metafile.readline().strip()
@@ -258,7 +260,7 @@ class Persistence:
             if el[0] != 0:
                 positives[k] = el[0]
 
-        return pred_vec, positives
+        return pred_vec, positives, postat_bool
 
     @classmethod
     def get_dt_prediction_input(cls, predictors): ## no metafile needed because columns are pre-determined
