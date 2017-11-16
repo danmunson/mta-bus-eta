@@ -10,7 +10,7 @@ import io
 get_live_data = DataCollection.GetBusData.live_nearest_bus
 get_model = Modeling.Persistence.get_stop_model
 get_lm_pred_input = Modeling.Persistence.get_lm_prediction_input
-get_dt_pred_input = Modeling.Persistence.get_dt_prediction_input
+get_categ_pred_input = Modeling.Persistence.get_categ_prediction_input
 
 def return_prediction(routename, direction, stop, current_model_type):
     #try:
@@ -38,11 +38,11 @@ def return_prediction(routename, direction, stop, current_model_type):
         metafile.close()
         if not postat_bool:
             return 'Bus out of range. Try again soon.'
-    elif current_model_type == 'dt':
+    elif current_model_type == 'categ':
         try:
-            pred_vec, pred_dict = get_dt_pred_input(live_data, metafile)
+            pred_vec = get_categ_pred_input(live_data, metafile)
         except Exception as e:
-            return str(e)
+            return 'categ exception: ' + str(e)
             #return 'Bus out of range. Try again soon.'
     prediction = model.predict(pred_vec)
     mins = int(prediction[0]/60)

@@ -18,7 +18,6 @@ import random
 from BusETA import DataCollection as Dc
 
 
-
 class Read:
     
     @classmethod
@@ -92,28 +91,30 @@ class FeatureEng:
         return new_df_dict
 
     @classmethod  #standard decision tree transform
-    def std_dt_transform(cls, df):
-        new_df = cls.separate_ToD_DoW(df, disc_time=True)
+    def std_dt_transform(cls, df, block_ct):
+        new_df = cls.separate_ToD_DoW(df, disc_time=True, time_blocks=block_ct)
         return new_df
 
     @classmethod
-    def apply_SDT(cls, dfs):
+    def apply_SDT(cls, dfs, time_blocks = 5):
         new_df_dict = {}
         for name, df in dfs.iteritems():
-            new_df = cls.std_dt_transform(df)
+            new_df = cls.std_dt_transform(df, block_ct = time_blocks)
             new_df_dict[name] = new_df
             print 'transformed ' + name
         return new_df_dict
 
     @classmethod
-    def separate_ToD_DoW(cls, df, disc_time=False):
+    def separate_ToD_DoW(cls, df, disc_time=False, time_blocks=5):
         newdf = df.copy()
         times = pd.to_datetime(newdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
         days = []
         hours = []
         for time in list(times):
             if disc_time:
-                hours.append(time.hour)
+                divisor = int(24/time_blocks)
+                block = int(time.hour/divisor)
+                hours.append(block)
             else:
                 hours.append(time.hour + (time.minute/60.0))
             days.append(time.weekday())
@@ -262,10 +263,10 @@ class Persistence:
             if el[0] != 0:
                 positives[k] = el[0]
 
-        return pred_vec, positives, postat_boolE
+        return pred_vec, positives, postat_bool
 
     @classmethod
-    def get_dt_prediction_input(cls, predictors): ## no metafile needed because columns are pre-determined
+    def get_categ_prediction_input(cls, predictors): ## for use with DataCollection.GetBusData.live_nearest_bus
         predictor_vec = {}
         predictor_vec['DayOfWeek'] = predictors['day']
         predictor_vec['TimeOfDay'] = predictors['hour']
@@ -278,5 +279,4 @@ class Persistence:
         else:
             predictor_vec['Status'] = status
 
-        pred_vec = pd.DataFrame(predictor_vec)
-        return pred_vec, predictor_vec
+        return predictor_vec
