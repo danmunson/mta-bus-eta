@@ -40,7 +40,7 @@ def return_prediction(routename, direction, stop, current_model_type):
             return 'Bus out of range. Try again soon.'
     elif current_model_type == 'categ':
         try:
-            pred_vec = get_categ_pred_input(live_data, metafile)
+            pred_vec = get_categ_pred_input(live_data)
         except Exception as e:
             return 'categ exception: ' + str(e)
             #return 'Bus out of range. Try again soon.'
