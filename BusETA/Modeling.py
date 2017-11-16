@@ -93,7 +93,7 @@ class FeatureEng:
 
     @classmethod  #standard decision tree transform
     def std_dt_transform(cls, df):
-        new_df = cls.separate_ToD_DoW(df)
+        new_df = cls.separate_ToD_DoW(df, disc_time=True)
         return new_df
 
     @classmethod
@@ -106,13 +106,16 @@ class FeatureEng:
         return new_df_dict
 
     @classmethod
-    def separate_ToD_DoW(cls, df):
+    def separate_ToD_DoW(cls, df, disc_time=False):
         newdf = df.copy()
         times = pd.to_datetime(newdf.ix[:,'Timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
         days = []
         hours = []
         for time in list(times):
-            hours.append(time.hour + (time.minute/60.0))
+            if disc_time:
+                hours.append(time.hour)
+            else:
+                hours.append(time.hour + (time.minute/60.0))
             days.append(time.weekday())
         newdf['TimeOfDay'] = pd.Series(hours)
         newdf['DayOfWeek'] = pd.Series(days)
@@ -216,7 +219,6 @@ class Persistence:
         for col in list(predictors.columns):
             meta.write(unicode(col+'\n'))
         meta.close()
-
         return
 
     @classmethod
@@ -260,7 +262,7 @@ class Persistence:
             if el[0] != 0:
                 positives[k] = el[0]
 
-        return pred_vec, positives, postat_bool
+        return pred_vec, positives, postat_boolE
 
     @classmethod
     def get_dt_prediction_input(cls, predictors): ## no metafile needed because columns are pre-determined
