@@ -49,7 +49,7 @@ def return_prediction(routename, direction, stop, current_model_type):
                 return 'Bus out of range. Try again soon.'
         
         est_mins = round(prediction[0]/60, 1)
-        return str(mins) + ' minutes.'
+        return str(est_mins) + ' minutes.'
     except Exception as e:
         return str(e)
 
