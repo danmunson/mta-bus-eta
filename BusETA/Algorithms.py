@@ -36,4 +36,4 @@ class MedianLookup():
         block = int(hour/divisor)
         key = (float(pv['Position']), pv['Status'], pv['DayOfWeek'], block)
         median = self.predictions[key]
-        return median
+        return [median]
