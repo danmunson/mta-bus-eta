@@ -31,6 +31,7 @@ def return_prediction(routename, direction, stop, current_model_type):
     
     pred_vec = None
     pred_dict = None
+    prediction = None
 
     if current_model_type == 'lm':
         metafile = io.open(stop_path+'/model_columns.txt', 'r')
@@ -38,14 +39,16 @@ def return_prediction(routename, direction, stop, current_model_type):
         metafile.close()
         if not postat_bool:
             return 'Bus out of range. Try again soon.'
+        else:
+            prediction = model.preddict(pred_vec)
     elif current_model_type == 'categ':
         try:
             pred_vec = get_categ_pred_input(live_data)
+            prediction = model.predict(pred_vec)
         except Exception as e:
             return 'Bus out of range. Try again soon.'
-    prediction = model.predict(pred_vec)
-    mins = int(prediction[0]/60)
     
+    mins = int(prediction[0]/60)
     return str(mins) + 'min : ' + str(pred_dict)
     #except Exception as e:
     #    return 'Exception: ' + str(e)
