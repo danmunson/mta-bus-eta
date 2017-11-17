@@ -31,10 +31,9 @@ class MedianLookup():
         return
 
     def predict(self, pv):
-        pred_options = self.predictions
         hour = int(pv['TimeOfDay'])
         divisor = int(24/self.time_blocks)
         block = int(hour/divisor)
         key = (pv['Position'], pv['Status'], pv['DayOfWeek'], block)
         #median = self.predictions[key]
-        return pred_options[pred_options.keys()[0]]
+        return self.predictions.keys()
