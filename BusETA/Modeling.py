@@ -226,6 +226,7 @@ class Persistence:
     def train_save_route(cls, dfs, model):
         for stop_name, dfi in dfs.iteritems():
             cls.train_and_save(dfi, model, stop_name)
+            print '** saved model for ', stop_name
         return
 
     @classmethod
