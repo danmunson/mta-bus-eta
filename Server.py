@@ -51,7 +51,7 @@ def return_prediction(routename, direction, stop, current_model_type):
         est_mins = round(prediction[0]/60, 1)
         return str(est_mins) + ' minutes.'
     except Exception as e:
-        return str(e)
+        return 'Prediction unavailable.'
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
