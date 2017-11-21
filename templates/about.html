@@ -51,15 +51,15 @@
     <div class="jumbotron">
       <div class="container">
           <div class='row'>
+              <h2>Full System Overview</h2>
+              <p>The core idea behind this prediction system is that, with enough observations of a bus traveling
+                from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
+                accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
+                applies to every valid combination of A and B on the route (although "reasonably accurate" is used
+                more leniently as distance between A and B increases).
+              </p>
+              <br>
               <div class="col-md-6">
-                <h2>Full System Overview</h2>
-                <p>The core idea behind this prediction system is that, with enough observations of a bus traveling
-                    from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
-                    accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
-                    applies to every valid combination of A and B on the route (although "reasonably accurate" is used
-                    more leniently as distance between A and B increases).
-                </p>
-                <br>
                 <img src="{{ url_for('static', filename='flowchart.png')}}"/>
               </div>
           </div>
