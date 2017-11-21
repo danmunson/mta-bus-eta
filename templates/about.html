@@ -58,7 +58,7 @@
                 applies to every valid combination of A and B on the route (although "reasonably accurate" is used
                 more leniently as distance between A and B increases).
               </p>
-              <p>See the source at: github.com/danmunson/mta-bus-eta</p>
+              <p><b>See the source at: <a href="github.com/danmunson/mta-bus-eta">github.com/danmunson/mta-bus-eta</a></b></p>
               <br>
               <div class="col-md-6">
                 <img src="{{ url_for('static', filename='flowchart.png')}}"/>
@@ -80,8 +80,8 @@
             are about 15s apart.
             </p><p>
             Following the end of the scraping interval, the "Data Cleaner and Transformer" will comb through the records (which
-            are formatted as [Direction,Position,Status,Timestamp]) and convert them into usable observations for each valid
-            Stop B in route R (observations for Stop B are formatted as [Stop #,Status,Timestamp,TimeDelta] where 'TimeDelta'
+            are formatted as <b>[Direction, Position, Status, Timestamp]</b>) and convert them into usable observations for each valid
+            Stop B in route R (observations for Stop B are formatted as <b>[Stop #, Status, Timestamp, TimeDelta]</b> where 'TimeDelta'
             indicates the time it took the bus to go from Stop # to Stop B). In this format, the data is easily used for training models.
         </p>
       </div>
@@ -93,7 +93,7 @@
             </p><p>
             Usable model types include the entire catalogue of relevant scikit-learn models, as well as custom models that can be found 
             in the BusETA.Algorithms module. <i>Due to time constraints and the skewed distribution of errors, 
-            the simplistic MedianLookup model is currently being used. This model will soon be replaced by a custom Decision Tree 
+            the simplistic Algorithms.MedianLookup model is currently being used. This model will soon be replaced by a custom Decision Tree 
             algorithm that deals with genuine categorical data (such a model is unavailable in scikit-learn without using a 
             <a href="https://roamanalytics.com/2016/10/28/are-categorical-variables-getting-lost-in-your-random-forests/">detrimental</a> binary encoding tranformation).</i>
         </p>
@@ -113,7 +113,8 @@
             </i>
         </p>
       </div>
-
+      <br>
+      <br>
       <footer>
         <p>&copy; Daniel Munson 2017 | dansmunson@gmail.com | github.com/danmunson/mta-bus-eta</p>
       </footer>
