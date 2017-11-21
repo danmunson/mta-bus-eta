@@ -36,7 +36,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">MTA Hates This!</a>
+          <a class="navbar-brand">MTA Hates This!</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class='nav navbar-nav'>
@@ -51,7 +51,15 @@
     <div class="jumbotron">
       <div class="container">
           <div class='row'>
-              <div class="col-md-7">
+              <div class="col-md-6">
+                <h2>Full System Overview</h2>
+                <p>The core idea behind this prediction system is that, with enough observations of a bus traveling
+                    from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
+                    accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
+                    applies to every valid combination of A and B on the route (although "reasonably accurate" is used
+                    more leniently as distance between A and B increases).
+                </p>
+                <br>
                 <img src="{{ url_for('static', filename='flowchart.png')}}"/>
               </div>
           </div>
@@ -59,7 +67,19 @@
     </div>
 
     <div class="container">
-      <!-- Example row of columns -->
+      <h2>Components</h2>
+      <div class='row'>
+        <h3>Data Collection and Processing</h3>
+        <p>----</p>
+      </div>
+      <div class='row'>
+        <h3>Model Building</h3>
+        <p>----</p>
+      </div>
+      <div class='row'>
+        <h3>ETA Delivery</h3>
+        <p>----</p>
+      </div>
 
       <footer>
         <p>&copy; Daniel Munson 2017</p>
