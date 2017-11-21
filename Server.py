@@ -101,6 +101,12 @@ def get_eta(routename, direction, stop):
     prediction = return_prediction(routename, direction, stop, current_model_type)
     return prediction
 
+
+@app.route('/about')
+def about_page():
+    return render_template('about.html')
+
+
 if __name__ == '__main__':
     app.run(host=ip_addr, port=port)
 else:

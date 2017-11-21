@@ -40,60 +40,28 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class='nav navbar-nav'>
-                <li class='active'><a href='#'>Bus Times</a></li>
-                <li><a href='/about'>About the Project</a></li>
+                <li><a href='/'>Bus Times</a></li>
+                <li class='active'><a href='#'>About the Project</a></li>
             </ul>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
 
-    <!-- Main jumbotron for a primary marketing message or call to action 
+    <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Hello, Commuter!</h1>
-        <p>This is a free service which may or may not be helpful.</p>
+          <div class='row'>
+              <div class="col-md-1"></div>
+              <div class="col-md-10">
+                <img src="{{ url_for('static', filename='flowchart.png')}}"/>
+              </div>
+              <div class="col-md-1"></div>
+          </div>
       </div>
-    </div> -->
+    </div>
 
     <div class="container">
-        <br>
-        <div class='row'>
-            <ol class='breadcrumb'>
-                <li><a href="/">Routes</a></li>
-                <li class="active">
-                    {{ direction_name }}
-                </li>
-            </ol>
-        </div>
-
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ direction_name }}</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <td><h4>Stop Name</h4></td>
-                                <td><h4>ETA</h4></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for stop in the_stops %}
-                            <tr>
-                                <td><b>{{ stop.name }}</b></td>
-                                <td class="eta-box" id="{{ stop.url }}">
-                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                                </td>
-                            </tr>        
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>      
-        </div>
+      <!-- Example row of columns -->
 
       <footer>
         <p>&copy; Daniel Munson 2017</p>
@@ -113,26 +81,6 @@
             e.src='//www.google-analytics.com/analytics.js';
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-        </script>
-
-        <script>
-          $('.eta-box').css( 'cursor', 'pointer');
-
-          $('.eta-box').on('click', function(event){
-            var ajax_url = 'eta/'+this.id;
-            var eta_box = this;
-            $.ajax({
-                url: ajax_url,
-                dataType: 'text',
-                success: function(data){
-                    console.log(data);
-                    $(eta_box).html(data);
-                    setTimeout(function(){
-                        $(eta_box).html('<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>');
-                    }, 30*1000);
-                }
-            });
-          });
         </script>
 
     </body>
