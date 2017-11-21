@@ -52,7 +52,7 @@
       <div class="container">
           <div class='row'>
               <h2>Full System Overview</h2>
-              <p>The core idea behind this prediction system is that, with enough observations of a bus traveling
+              <p>The core idea behind this prediction system is: with enough observations of a bus traveling
                 from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
                 accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
                 applies to every valid combination of A and B on the route (although "reasonably accurate" is used
@@ -67,22 +67,54 @@
     </div>
 
     <div class="container">
-      <h2>Components</h2>
+      <div class='row'>
+        <h2><i>Components</i></h2>
+      </div>
       <div class='row'>
         <h3>Data Collection and Processing</h3>
-        <p>----</p>
+        <p>Consider the case of a specific route R. Raw data is sourced from MTA-hosted websites that provide the 
+            real time position of buses along each direction of R (ex: https://bustime.mta.info/m/?q=M60-SBS). For a 
+            pre-specified interval (usually 30 min), the "Periodic Scraper" will make periodic GET requests to the appropriate URL
+            and record the position and status of all buses displayed. In order for buses to be tracked over time, GET requests 
+            are about 15s apart.
+            </p><p>
+            Following the end of the scraping interval, the "Data Cleaner and Transformer" will comb through the records (which
+            are formatted as [Direction,Position,Status,Timestamp]) and convert them into usable observations for each valid
+            Stop B in route R (observations for Stop B are formatted as [Stop #,Status,Timestamp,TimeDelta] where 'TimeDelta'
+            indicates the time it took the bus to go from Stop # to Stop B). In this format, the data is easily used for training models.
+        </p>
       </div>
       <div class='row'>
         <h3>Model Building</h3>
-        <p>----</p>
+        <p>Models are manually evaluated, trained and saved using the Python IDE in a shell of the virtual machine. The BusETA.Modeling
+            module has specific functions for: <i>reading the data for each stop in a route; feature-engineering/encoding transformations;  
+            training models for a given stop; comparing the average cross-validated accuracy of different models; saving the models for use by end users</i>.
+            </p><p>
+            Usable model types include the entire catalogue of relevant scikit-learn models, as well as custom models that can be found 
+            in the BusETA.Algorithms module. <i>Due to time constraints and the skewed distribution of errors, 
+            the simplistic MedianLookup model is currently being used. This model will soon be replaced by a custom Decision Tree 
+            algorithm that deals with genuine categorical data (such a model is unavailable in scikit-learn without using a 
+            <a href="https://roamanalytics.com/2016/10/28/are-categorical-variables-getting-lost-in-your-random-forests/">detrimental</a> binary encoding tranformation).</i>
+        </p>
       </div>
       <div class='row'>
         <h3>ETA Delivery</h3>
-        <p>----</p>
+        <p>ETAs are delivered to the end user via this website! Users select a route and direction on the homepage, and they are 
+            returned a list of stops. Clicking on the "refresh" button to the right of a stop returns an estimate for the time 
+            until the nearest bus reaches that stop. To return the ETA: 1) the server identifies the requested stop from the URL params; 
+            2) the server makes a request to the appropriate bus-site URL and identifies the postion and status of the nearest bus; 
+            3) the appropriate pre-trained model is loaded and passed the real-time observation; 4) the ETA predicted by the model is 
+            returned to the user.
+            </p><p>
+            <i>Note: in some cases, the system will not be able to return a prediction. This is usually due to one of three reasons:
+                A) the stop is too early in the route for this observation method to collect meaningful data; B) there is no "nearest bus" 
+                currently at any preceding stops; C) the "nearest bus" is far enough away that not enough A-->B observations exist to make a prediction.
+            </i>
+        </p>
       </div>
 
       <footer>
-        <p>&copy; Daniel Munson 2017</p>
+        <p>&copy; Daniel Munson 2017 | dansmunson@gmail.com | https://github.com/danmunson/mta-bus-eta</p>
       </footer>
     </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
