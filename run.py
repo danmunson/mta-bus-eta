@@ -16,6 +16,11 @@ dirsplitter = DataTransforms.Transforms.split_directions
 normalize = DataCollection.GetBusData.normalize
 capture = DataCollection.GetBusData.capture_bus_page
 
+def remove_old_files():
+    return
+
+def train_new_models():
+    return
 
 def process_data():
     #fixes an encoding problem
@@ -62,7 +67,7 @@ def process_data():
 
 
 #batch interval represents the duration for one batch of routes to be scraped continuously
-#suggested batch interval = 25 min
+#suggested batch interval = 30 min
 batch_interval_minutes = float(raw_input('Enter batch interval (minutes): '))
 #scrape interval represents the duration of time in between snapshots of a given route (note, this time only represents a target)
 #suggested scrape interval = 20s
@@ -120,5 +125,8 @@ for num in range(total_iterations):
     
     print '* Batch ' + str(num) + ' complete *'
     process_data()
+    #if num % (48*7) == 0:
+    #   remove_old_files()
+    #   train_new_models()
 
 print '** Collection process complete **'
