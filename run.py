@@ -72,8 +72,6 @@ batch_interval_minutes = float(raw_input('Enter batch interval (minutes): '))
 #scrape interval represents the duration of time in between snapshots of a given route (note, this time only represents a target)
 #suggested scrape interval = 20s
 scrape_interval_seconds = float(raw_input('Enter scrape interval (seconds): '))
-#total duration -- min
-total_iterations = int(raw_input('Enter number of batch iterations: '))
 
 BI_sec = batch_interval_minutes * 60
 SI_sec = scrape_interval_seconds
@@ -89,9 +87,9 @@ counter = num_routes # this counter is used to generate a new batch at each cycl
 
 ## Step 2: Loop through batches, passing each batch to the scrape cycler
 
-for num in range(total_iterations):
+num = 0
+while True:
     #generate batch by cycling thru the route_dict in intervals of BATCH_SIZE
-    
     route_names = list(route_dict.ix[:,0])
     for name in route_names:
         csv = io.open('Routes/' + name + '/stopdata.csv', 'w')
@@ -125,8 +123,8 @@ for num in range(total_iterations):
     
     print '* Batch ' + str(num) + ' complete *'
     process_data()
-    #if num % (48*7) == 0:
+    if num % (48*7) == 0:
     #   remove_old_files()
     #   train_new_models()
+    num += 1
 
-print '** Collection process complete **'
