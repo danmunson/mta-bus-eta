@@ -1,13 +1,12 @@
 #run
 import requests as req
-import io
+import io, os, shutil, unicodedata, datetime 
 import pandas as pd
 from bs4 import BeautifulSoup as BS
-import datetime
-import unicodedata
-import os, shutil
 from BusETA import DataTransforms
 from BusETA import DataCollection
+from BusETA import Modeling as Md
+from BusETA import Algorithms
 import sys
 
 cursor = DataTransforms.Transforms.cursor
@@ -31,8 +30,19 @@ def remove_old_files():
                     os.remove(pathname)
     return
 
+
+MODEL_OBJ = Algorithms.MedianLookup
 def train_new_models():
+    route_names = []
+    for root, ds, fs in os.walk('Routes'):
+        route_names = list(ds)
+        break
+    for route in route_names:
+        stopdfs = Md.Read.read_all_stops(route)
+        finished_dfs = Md.FeatureEng.apply_SDT(stopdfs)
+        Md.Persistence.train_save_route(finished_dfs, MODEL_OBJ)
     return
+
 
 def process_data():
     #fixes an encoding problem

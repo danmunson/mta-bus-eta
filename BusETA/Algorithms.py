@@ -37,3 +37,5 @@ class MedianLookup():
         key = (float(pv['Position']), pv['Status'], int(pv['DayOfWeek']), block)
         median = self.predictions[key]
         return [median]
+
+#class MaxCrossSection():
