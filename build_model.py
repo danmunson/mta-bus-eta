@@ -13,3 +13,5 @@ def train_new_models():
         finished_dfs = Md.FeatureEng.apply_SDT(stopdfs)
         Md.Persistence.train_save_route(finished_dfs, MODEL_OBJ)
     return
+
+train_new_models()
