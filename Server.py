@@ -94,9 +94,6 @@ def route(routename, direction):
     stops = pos_df[pos_df.ix[:,0] == direction]
     stop_names = list(stops.ix[:,1])
 
-    #for root, dirs, files in os.walk(full_path):
-    #    stop_names = list(dirs)
-    #    break
     for stop_name in stop_names:
         stop = normalize(stop_name)
         url = os.path.join(direction, stop)

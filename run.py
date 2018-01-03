@@ -109,9 +109,8 @@ route_dict = pd.read_csv('./route_dict.csv', header=None)
 num_routes = route_dict.shape[0]
 counter = num_routes # this counter is used to generate a new batch at each cycle
 
-## Step 2: Loop through batches, passing each batch to the scrape cycler
-
-num = 0
+## Step 3: Loop through batches of scraping
+num = 1
 while True:
     #generate batch by cycling thru the route_dict in intervals of BATCH_SIZE
     route_names = list(route_dict.ix[:,0])
