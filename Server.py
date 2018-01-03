@@ -11,6 +11,7 @@ get_live_data = DataCollection.GetBusData.live_nearest_bus
 get_model = Modeling.Persistence.get_stop_model
 get_lm_pred_input = Modeling.Persistence.get_lm_prediction_input
 get_categ_pred_input = Modeling.Persistence.get_categ_prediction_input
+normalize = DataCollection.GetBusData.normalize
 
 def return_prediction(routename, direction, stop, current_model_type):
     try:
@@ -58,7 +59,7 @@ sys.setdefaultencoding('utf8')
 
 ip_addr = sys.argv[1]
 port = sys.argv[2]
-current_model_type = sys.argv[3]    #sad, sorry shortcut
+current_model_type = sys.argv[3]
 
 app = Flask(__name__)
 
@@ -85,12 +86,19 @@ def index():
 def route(routename, direction):
     url_path = os.path.join(routename, direction)
     full_path = os.path.join('Routes', url_path)
+    pos_path = os.path.join('Routes', routename+'/positioning.csv')
     the_stops = []
     stop_names = []
-    for root, dirs, files in os.walk(full_path):
-        stop_names = list(dirs)
-        break
-    for stop in stop_names:
+
+    pos_df = pd.read_csv(pos_path, header=None)
+    stops = pos_df[pos_df.ix[:,0] == direction]
+    stop_names = list(stops.ix[:,1])
+
+    #for root, dirs, files in os.walk(full_path):
+    #    stop_names = list(dirs)
+    #    break
+    for stop_name in stop_names:
+        stop = normalize(stop_name)
         url = os.path.join(direction, stop)
         the_stops.append({'name':stop,'url':url})
 
