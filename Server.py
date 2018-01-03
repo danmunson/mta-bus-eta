@@ -93,6 +93,7 @@ def route(routename, direction):
     for stop in stop_names:
         url = os.path.join(direction, stop)
         the_stops.append({'name':stop,'url':url})
+
     return render_template('stops.html', the_stops=the_stops, direction_name=direction)
 
 
