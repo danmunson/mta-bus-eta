@@ -50,18 +50,21 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1><b>Homegrown ETAs</b></h1>
-        <h2><i>for the conscious commuter.</i></h2>
+        <h1><b>Rogue Bus Times</b></h1>
+        <h2><i>Underground ETAs for Aboveground Commuters</i></h2>
       </div>
     </div>
 
     <div class="container">
       <!-- Example row of columns -->
       <div class='row'>
+        <h4>Welcome! This website generates ETAs for specific MTA bus routes using publicly available, real-time location data. These ETAs use only historical data and are blind to the MTA’s own estimates, making them suitable for use as a “second opinion.” Click <a href='/about'>here</a> for more details about the project.</h4>
+      </div>
+      <div class='row'>
         <h4></h4>
       </div>
       <div class='row'>
-        <h3>Select your Route and Direction:</h3>
+        <h3>To get an ETA: Select your Route and Direction below.</h3>
       </div>
       <br>
       {% for route in the_routes %}
