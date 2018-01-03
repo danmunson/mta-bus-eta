@@ -86,14 +86,11 @@ def route(routename, direction):
     url_path = os.path.join(routename, direction)
     full_path = os.path.join('Routes', url_path)
     the_stops = []
-    stop_names = []
-    for root, dirs, files in os.walk(full_path):
-        stop_names = list(dirs)
-        break
+    position_df = pd.read_csv(full_path+'/positioning.csv', header=None)
+    stop_names = list(position_df.ix[:,0])
     for stop in stop_names:
         url = os.path.join(direction, stop)
         the_stops.append({'name':stop,'url':url})
-
     return render_template('stops.html', the_stops=the_stops, direction_name=direction)
 
 
