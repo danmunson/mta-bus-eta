@@ -47,27 +47,28 @@
       </div>
     </nav>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <!-- Main jumbotron for a primary marketing message or call to action 
     <div class="jumbotron">
       <div class="container">
-          <div class='row'>
-              <h2>Concept Overview</h2>
-              <p>The core idea behind this prediction system is this: with enough observations of a bus traveling
-                from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
-                accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
-                applies to every valid combination of A and B on the route (although "reasonably accurate" is used
-                more leniently as distance between A and B increases).
-              </p>
-              <p><b>See the source at: <a href="github.com/danmunson/mta-bus-eta">github.com/danmunson/mta-bus-eta</a></b></p>
-              <br>
-              <div class="col-md-6">
-                <img src="{{ url_for('static', filename='m60_screenshot.png')}}"/>
-              </div>
-          </div>
+          
       </div>
-    </div>
+    </div> -->
 
     <div class="container">
+      <div class='row'>
+        <h2><i>Concept Overview</i></h2>
+      </div>
+      <div class='row'>
+        <p>The core idea behind this prediction system is this: with enough observations of a bus traveling
+          from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
+          accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
+          applies to every valid combination of A and B on the route (although "reasonably accurate" is used
+          more leniently as distance between A and B increases).
+        </p>
+        <p><b>See the source at: <a href="github.com/danmunson/mta-bus-eta">github.com/danmunson/mta-bus-eta</a></b></p>
+        <br>
+        <img src="{{ url_for('static', filename='m60_screenshot.png')}}"/>
+      </div>
       <div class='row'>
         <h2><i>System Components</i></h2>
       </div>
