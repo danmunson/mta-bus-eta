@@ -59,13 +59,13 @@
         <h2><i>Concept Overview</i></h2>
       </div>
       <div class='row'>
-        <p>The core idea behind this prediction system is this: with enough observations of a bus traveling
+        <p style="font-size:17px">The core idea behind this prediction system is this: with enough observations of a bus traveling
           from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
           accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
           applies to every valid combination of A and B on the route (although "reasonably accurate" is used
           more leniently as distance between A and B increases).
         </p>
-        <div margin-bottom="8px"><img src="{{ url_for('static', filename='m60_screenshot.png')}}"/></div>
+        <div style="margin-bottom:8px; border:2px solid black;"><img src="{{ url_for('static', filename='m60_screenshot.png')}}"/></div>
         <p><i><b>Above:</b> A screenshot of the site for the M60SBS route. Bus locations and statuses are clearly visible.</i></p>
       </div>
       <br>
@@ -75,12 +75,12 @@
       </div>
       <div class='row'>
         <h3>Data Collection and Processing</h3>
-        <p>Raw data is sourced from MTA-hosted websites that provide the 
+        <p style="font-size:17px">Raw data is sourced from MTA-hosted websites that provide the 
             real time position of buses along each direction of a specific route (ex: <a href="https://bustime.mta.info/m/?q=M60-SBS">M60SBS</a>). For a 
             pre-specified interval (usually 30 min), the "Periodic Scraper" will make periodic GET requests to the appropriate URL
             and record the position and status of all buses displayed. In order for buses to be accurately tracked over time, GET requests 
             are about 15s apart.
-            </p><p>
+            </p><p style="font-size:17px">
             Following the end of the scraping interval, the "Data Cleaner and Transformer" will comb through the records (which
             are formatted as <b>[Direction, Position, Status, Timestamp]</b>) and convert them into usable observations for each valid
             Stop B in route R (observations for Stop B are formatted as <b>[Stop #, Status, Timestamp, TimeDelta]</b> where 'TimeDelta'
@@ -89,10 +89,10 @@
       </div>
       <div class='row'>
         <h3>Model Building</h3>
-        <p>Models are trained and deployed each week automatically, but can also be manually evaluated, trained and deployed using the Python IDE in a shell of the virtual machine. The BusETA.Modeling
+        <p style="font-size:17px">Models are trained and deployed each week automatically, but can also be manually evaluated, trained and deployed using the Python IDE in a shell of the virtual machine. The BusETA.Modeling
             module has specific functions for: <i>reading the data for each stop in a route; feature-engineering/encoding transformations;  
             training models for a given stop; comparing the average cross-validated accuracy of different models; saving the models for use by end users</i>.
-            </p><p>
+            </p><p style="font-size:17px">
             Usable model types include the entire catalogue of relevant scikit-learn models, as well as custom models that can be found 
             in the BusETA.Algorithms module. <i>Currently, a simple table of median durations for all valid combinations is in use, and has demonstrated reasonable accuracy. 
             As of January 2018 though, this model is expected to be replaced by a custom Decision Tree 
@@ -102,13 +102,13 @@
       </div>
       <div class='row'>
         <h3>ETA Delivery</h3>
-        <p>ETAs are delivered to the end user via this website! Users select a route and direction on the homepage, and they are 
+        <p style="font-size:17px">ETAs are delivered to the end user via this website! Users select a route and direction on the homepage, and they are 
             returned a list of stops. Clicking on the "refresh" button to the right of a stop returns an estimate for the time 
             until the nearest bus reaches that stop. To return the ETA: (1) the server identifies the requested stop from the URL params; 
             (2) the server makes a request to the appropriate bus-site URL and identifies the postion and status of the nearest bus; 
             (3) the appropriate pre-trained model is loaded and passed the real-time observation; (4) the ETA predicted by the model is 
             returned to the user.
-            </p><p>
+            </p><p style="font-size:17px">
             <i>Note: in some cases, the system will not be able to return a prediction. This is usually due to one of three reasons:
                 A) the stop is too early in the route for this observation method to collect meaningful data; B) there is no "nearest bus" 
                 currently at any preceding stops; C) the "nearest bus" is far enough away that not enough A-->B observations exist to make a prediction.
