@@ -59,7 +59,7 @@
         <h2><i>Concept Overview</i></h2>
       </div>
       <div class='row'>
-        <p style="font-size:17px">The core idea behind this prediction system is this: with enough observations of a bus traveling
+        <p style="font-size:17px">The core idea behind this prediction system is such: with enough observations of a bus traveling
           from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
           accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
           applies to every valid combination of A and B on the route (although "reasonably accurate" is used
@@ -68,7 +68,6 @@
         <div style="margin-bottom:8px; border:2px solid black;"><img src="{{ url_for('static', filename='m60_screenshot.png')}}"/></div>
         <p><i><b>Above:</b> A screenshot of the site for the M60SBS route. Bus locations and statuses are clearly visible.</i></p>
       </div>
-      <br>
       <br>
       <div class='row'>
         <h2><i>System Components</i></h2>
@@ -117,7 +116,7 @@
       </div>
       <div class='row'>
         <h3>Flowchart</h3>
-        <div class="col-md-6">
+        <div style="margin-bottom:8px; border:2px solid black;">
             <img src="{{ url_for('static', filename='flowchart.png')}}"/>
         </div>
         <p><b>See the source at: <a href="github.com/danmunson/mta-bus-eta">github.com/danmunson/mta-bus-eta</a></b></p>
