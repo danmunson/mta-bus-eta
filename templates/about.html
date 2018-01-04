@@ -63,7 +63,8 @@
           from Stop A to Stop B on a given bus route, a trained model should be able to deliver a reasonably
           accurate ETA for a bus near Stop A to a user waiting at Stop B. Provided there is enough data, this
           applies to every valid combination of A and B on the route (although "reasonably accurate" is used
-          more leniently as distance between A and B increases).
+          more leniently as distance between A and B increases). The NYC MTA runs a website for displaying the real-time locations
+          of buses along a selected route; periodic scraping of these pages yields the data described above.
         </p>
         <div style="margin-bottom:8px; border:2px solid black;"><img src="{{ url_for('static', filename='m60_screenshot.png')}}"/></div>
         <p><i><b>Above:</b> A screenshot of the site for the M60SBS route. Bus locations and statuses are clearly visible.</i></p>
