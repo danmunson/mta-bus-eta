@@ -24,8 +24,8 @@ def remove_old_files():
             if ext == '.csv':
                 if name == 'stopdata' or name == 'positioning':
                     continue
-                timestamp = dt.datetime.strptime(name, '%Y-%m-%d %H:%M:%S.%f')
-                delta = dt.datetime.now() - timestamp
+                timestamp = datetime.datetime.strptime(name, '%Y-%m-%d %H:%M:%S.%f')
+                delta = datetime.datetime.now() - timestamp
                 if delta.total_seconds() > (24 * 60 * 60 * MAX_DAYS):
                     pathname = os.path.join(root, f)
                     os.remove(pathname)
@@ -146,7 +146,7 @@ while True:
     
     print '* Batch ' + str(num) + ' complete *'
     process_data()
-    if num % (48*7) == 0:
+    if num % (24*7) == 0:   #24 --> half week
         remove_old_files()
         train_new_models()
     num += 1

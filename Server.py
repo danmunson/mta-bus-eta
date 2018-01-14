@@ -41,7 +41,7 @@ def return_prediction(routename, direction, stop, current_model_type):
             if not postat_bool:
                 return 'Bus out of range. Try again soon.'
             else:
-                prediction = model.preddict(pred_vec)
+                prediction = model.predict(pred_vec)
         elif current_model_type == 'categ':
             try:
                 pred_vec = get_categ_pred_input(live_data)
