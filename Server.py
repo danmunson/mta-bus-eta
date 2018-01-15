@@ -39,7 +39,7 @@ def return_prediction(routename, direction, stop, current_model_type):
             pred_vec, pred_dict, postat_bool = get_lm_pred_input(live_data, metafile)
             metafile.close()
             if not postat_bool:
-                return 'Bus out of range. Try again soon.'
+                return 'Prediction temporarily unavailable.'
             else:
                 prediction = model.predict(pred_vec)
         elif current_model_type == 'categ':
@@ -47,8 +47,7 @@ def return_prediction(routename, direction, stop, current_model_type):
                 pred_vec = get_categ_pred_input(live_data)
                 prediction = model.predict(pred_vec)
             except Exception as e:
-                return str(e)
-                #return 'Bus out of range. Try again soon.'
+                return 'Prediction temporarily unavailable.'
         
         est_mins = round(prediction[0]/60, 1)
         return str(est_mins) + ' minutes.'
