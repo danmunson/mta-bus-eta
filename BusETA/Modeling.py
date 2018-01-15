@@ -276,7 +276,7 @@ class Persistence:
         predictor_vec['Position'] = split_postat[0]
         status = split_postat[1]
         if status[-10:] == 'miles away':
-            predictor_vec['Status'] = status[0:]
+            predictor_vec['Status'] = status[0:]  #note: used to be status[1:] was necessary
         else:
             predictor_vec['Status'] = status
 
