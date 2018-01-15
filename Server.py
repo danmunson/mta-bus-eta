@@ -47,7 +47,8 @@ def return_prediction(routename, direction, stop, current_model_type):
                 pred_vec = get_categ_pred_input(live_data)
                 prediction = model.predict(pred_vec)
             except Exception as e:
-                return 'Bus out of range. Try again soon.'
+                return str(e)
+                #return 'Bus out of range. Try again soon.'
         
         est_mins = round(prediction[0]/60, 1)
         return str(est_mins) + ' minutes.'

@@ -147,6 +147,6 @@ while True:
     print '* Batch ' + str(num) + ' complete *'
     process_data()
     if num % (24*7) == 0:   #24 --> half week
-        remove_old_files()
         train_new_models()
+        remove_old_files()
     num += 1
