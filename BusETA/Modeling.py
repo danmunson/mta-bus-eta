@@ -129,7 +129,7 @@ class FeatureEng:
         for i in range(dummdf.shape[0]):
             status = dummdf.ix[i,'Status']
             if status[-10:] == 'miles away':
-                dummdf.ix[i,'Status'] = status[1:]
+                dummdf.ix[i,'Status'] = status[0:]  #note: used to be status[1:]
         postats = []
         for i in range(dummdf.shape[0]):
             position = dummdf.ix[i,'Position']
