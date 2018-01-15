@@ -1,4 +1,5 @@
-#run
+#encapsulates entire data mining and model management process
+
 import requests as req
 import io, os, shutil, unicodedata, datetime 
 import pandas as pd
