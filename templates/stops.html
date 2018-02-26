@@ -125,6 +125,7 @@
           $('.eta-box').on('click', function(event){
             var ajax_url = 'eta/'+this.id;
             var eta_box = this;
+            $(eta_box).html('Hold on...');
             $.ajax({
                 url: ajax_url,
                 dataType: 'text',
